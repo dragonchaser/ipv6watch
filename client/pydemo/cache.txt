@@ -1,0 +1,15 @@
+2001:1a50:11:0:5f:8f:ac:5 dev eth0 lladdr 00:25:90:35:b7:a0 STALE
+fe80::230:48ff:fe7a:1f22 dev eth0 lladdr 00:30:48:7a:1f:22 STALE
+2001:1a50:11:0:5f:8f:ac:51 dev eth0 lladdr 00:30:48:bd:46:64 STALE
+2001:1a50:11::1 dev eth0 lladdr 00:1c:0f:5c:95:80 router STALE
+fe80::230:48ff:fe7a:1f24 dev eth0 lladdr 00:30:48:7a:1f:24 STALE
+fe80::225:90ff:fe35:b7a0 dev eth0 lladdr 00:25:90:35:b7:a0 STALE
+fe80::21c:fff:fe5c:9580 dev eth0 lladdr 00:1c:0f:5c:95:80 router STALE
+fe80::225:90ff:fea9:673e dev eth0 lladdr 00:25:90:a9:67:3e REACHABLE
+2001:1a50:11:0:5f:8f:ac:c5 dev eth0 lladdr 00:25:90:a9:67:3e REACHABLE
+2001:1a50:11:0:5f:8f:ac:8f dev eth0 lladdr 00:30:48:7a:1f:24 DELAY
+2001:1a50:11:0:5f:8f:ac:ae dev eth0 lladdr 00:30:48:7a:1f:22 STALE
+2001:1a50:11:0:5f:8f:ac:e dev eth0 lladdr 00:0e:0c:6b:53:87 STALE
+fe80::20e:cff:fe6b:5387 dev eth0 lladdr 00:0e:0c:6b:53:87 STALE
+fe80::230:48ff:febd:4664 dev eth0 lladdr 00:30:48:bd:46:64 STALE
+2001:1a50:11:0:5f:8f:ac:64 dev eth0 lladdr 00:30:48:77:29:a6 STALE
