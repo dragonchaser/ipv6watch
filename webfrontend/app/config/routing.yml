@@ -1,0 +1,8 @@
+hsp_page:
+    resource: "@HSPPageBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hsp_admin:
+    resource: "@HSPAdminBundle/Resources/config/routing.yml"
+    prefix:   /
+

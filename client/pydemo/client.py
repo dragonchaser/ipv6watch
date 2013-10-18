@@ -9,10 +9,11 @@ import re
 import xml.etree.cElementTree as et
 import http.client, urllib.parse
 
-cache = True # for debugging purposes only, if true cache.txt instead of stdout is used
+cache = False # for debugging purposes only, if true cache.txt instead of stdout is used
 host = 'localhost' # http host
 command = 'ip -6 neigh show'
 encoding = locale.getdefaultlocale()[1]
+encoding = "ISO8859-15"
 
 if cache:
     lst = open('cache.txt').read().splitlines()
