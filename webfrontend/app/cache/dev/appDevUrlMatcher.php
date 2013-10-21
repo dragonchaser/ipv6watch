@@ -143,30 +143,22 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
 
         if (0 === strpos($pathinfo, '/admin')) {
-            if (0 === strpos($pathinfo, '/admin/log')) {
-                if (0 === strpos($pathinfo, '/admin/login')) {
-                    // fos_user_security_login
-                    if ($pathinfo === '/admin/login') {
-                        return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::loginAction',  '_route' => 'fos_user_security_login',);
-                    }
-
-                    // fos_user_security_check
-                    if ($pathinfo === '/admin/login_check') {
-                        if ($this->context->getMethod() != 'POST') {
-                            $allow[] = 'POST';
-                            goto not_fos_user_security_check;
-                        }
-
-                        return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::checkAction',  '_route' => 'fos_user_security_check',);
-                    }
-                    not_fos_user_security_check:
-
+            if (0 === strpos($pathinfo, '/admin/login')) {
+                // fos_user_security_login
+                if ($pathinfo === '/admin/login') {
+                    return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::loginAction',  '_route' => 'fos_user_security_login',);
                 }
 
-                // fos_user_security_logout
-                if ($pathinfo === '/admin/logout') {
-                    return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::logoutAction',  '_route' => 'fos_user_security_logout',);
+                // fos_user_security_check
+                if ($pathinfo === '/admin/login_check') {
+                    if ($this->context->getMethod() != 'POST') {
+                        $allow[] = 'POST';
+                        goto not_fos_user_security_check;
+                    }
+
+                    return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::checkAction',  '_route' => 'fos_user_security_check',);
                 }
+                not_fos_user_security_check:
 
             }
 
@@ -304,6 +296,11 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 return array (  '_controller' => 'FOS\\UserBundle\\Controller\\ChangePasswordController::changePasswordAction',  '_route' => 'fos_user_change_password',);
             }
             not_fos_user_change_password:
+
+            // fos_user_security_logout
+            if ($pathinfo === '/admin/logout') {
+                return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::logoutAction',  '_route' => 'fos_user_security_logout',);
+            }
 
             // hsp_admin_homepage
             if (preg_match('#^/admin(?P<trailingSlash>[/]{0,1})$#s', $pathinfo, $matches)) {
