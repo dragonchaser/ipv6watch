@@ -1,0 +1,3 @@
+hsp_page_homepage:
+    pattern:  /
+    defaults: { _controller: "HSPPageBundle:Default:index" }

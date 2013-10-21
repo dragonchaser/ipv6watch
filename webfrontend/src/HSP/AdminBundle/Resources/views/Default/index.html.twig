@@ -1,0 +1,11 @@
+{% extends "HSPPageBundle::layout.html.twig" %}
+
+{% block title "Administration" %}
+
+{% block content_header 'Administration' %}
+{% block header_menu %}
+{{ knp_menu_render('HSPAdminBundle:Builder:mainMenu') }}
+{% endblock %}
+{% block content %}
+	admin area
+{% endblock %}

@@ -1,0 +1,5 @@
+hsp_admin_homepage:
+    #pattern:  /admin/{name}
+    pattern:  /admin{trailingSlash}
+    requirements: { trailingSlash: "[/]{0,1}" }
+    defaults: { _controller: "HSPAdminBundle:Default:index"}

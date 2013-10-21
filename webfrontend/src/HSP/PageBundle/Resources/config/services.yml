@@ -1,0 +1,7 @@
+parameters:
+#    hsp_page.example.class: HSP\PageBundle\Example
+
+services:
+#    hsp_page.example:
+#        class: %hsp_page.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
