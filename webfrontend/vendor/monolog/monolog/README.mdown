@@ -45,8 +45,8 @@ the bottom of the stack that will log anything to disk, and on top of that add
 a `MailHandler` that will send emails only when an error message is logged.
 Handlers also have a `$bubble` property which defines whether they block the
 record or not if they handled it. In this example, setting the `MailHandler`'s
-`$bubble` argument to true means that all records will propagate to the
-`StreamHandler`, even the errors that are handled by the `MailHandler`.
+`$bubble` argument to false means that records handled by the `MailHandler` will
+not propagate to the `StreamHandler` anymore.
 
 You can create many `Logger`s, each defining a channel (e.g.: db, request,
 router, ..) and each of them combining various handlers, which can be shared
@@ -68,16 +68,13 @@ information (tags, user ip, ..) to the records before they are handled.
 Log Levels
 ----------
 
-Monolog supports all 8 logging levels defined in
-[RFC 5424](http://tools.ietf.org/html/rfc5424), but unless you specifically
-need syslog compatibility, it is advised to only use DEBUG, INFO, WARNING,
-ERROR, CRITICAL, ALERT.
+Monolog supports the logging levels described by [RFC 5424](http://tools.ietf.org/html/rfc5424).
 
 - **DEBUG** (100): Detailed debug information.
 
 - **INFO** (200): Interesting events. Examples: User logs in, SQL logs.
 
-- NOTICE (250): Normal but significant events.
+- **NOTICE** (250): Normal but significant events.
 
 - **WARNING** (300): Exceptional occurrences that are not errors. Examples:
   Use of deprecated APIs, poor use of an API, undesirable things that are not
@@ -93,7 +90,7 @@ ERROR, CRITICAL, ALERT.
   down, database unavailable, etc. This should trigger the SMS alerts and wake
   you up.
 
-- EMERGENCY (600): Emergency: system is unusable.
+- **EMERGENCY** (600): Emergency: system is unusable.
 
 Docs
 ====
@@ -225,10 +222,11 @@ Frameworks Integration
   can be used very easily with Monolog since it implements the interface.
 - [Symfony2](http://symfony.com) comes out of the box with Monolog.
 - [Silex](http://silex.sensiolabs.org/) comes out of the box with Monolog.
-- [Laravel4](http://laravel.com/) comes out of the box with Monolog.
+- [Laravel 4](http://laravel.com/) comes out of the box with Monolog.
 - [PPI](http://www.ppi.io/) comes out of the box with Monolog.
 - [CakePHP](http://cakephp.org/) is usable with Monolog via the [cakephp-monolog](https://github.com/jadb/cakephp-monolog) plugin.
 - [Slim](http://www.slimframework.com/) is usable with Monolog via the [Slim-Monolog](https://github.com/Flynsarmy/Slim-Monolog) log writer.
+- [XOOPS 2.6](http://xoops.org/) comes out of the box with Monolog.
 
 Author
 ------

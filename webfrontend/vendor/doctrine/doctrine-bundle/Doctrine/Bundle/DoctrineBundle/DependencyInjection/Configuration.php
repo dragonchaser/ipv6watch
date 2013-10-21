@@ -131,6 +131,7 @@ class Configuration implements ConfigurationInterface
             ->fixXmlConfig('option')
             ->fixXmlConfig('mapping_type')
             ->fixXmlConfig('slave')
+            ->fixXmlConfig('shard')
             ->children()
                 ->scalarNode('driver')->defaultValue('pdo_mysql')->end()
                 ->scalarNode('platform_service')->end()
@@ -139,6 +140,8 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('profiling')->defaultValue($this->debug)->end()
                 ->scalarNode('driver_class')->end()
                 ->scalarNode('wrapper_class')->end()
+                ->scalarNode('shard_choser')->end()
+                ->scalarNode('shard_choser_service')->end()
                 ->booleanNode('keep_slave')->end()
                 ->arrayNode('options')
                     ->useAttributeAsKey('key')
@@ -158,6 +161,19 @@ class Configuration implements ConfigurationInterface
                     ->prototype('array')
         ;
         $this->configureDbalDriverNode($slaveNode);
+
+        $shardNode = $connectionNode
+            ->children()
+                ->arrayNode('shards')
+                    ->prototype('array')
+                    ->children()
+                        ->integerNode('id')
+                            ->min(1)
+                            ->isRequired()
+                        ->end()
+                    ->end()
+        ;
+        $this->configureDbalDriverNode($shardNode);
 
         return $node;
     }
@@ -305,6 +321,8 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('default_repository_class')->defaultValue('Doctrine\ORM\EntityRepository')->end()
                     ->scalarNode('auto_mapping')->defaultFalse()->end()
                     ->scalarNode('naming_strategy')->defaultValue('doctrine.orm.naming_strategy.default')->end()
+                    ->scalarNode('entity_listener_resolver')->defaultNull()->end()
+                    ->scalarNode('repository_factory')->defaultNull()->end()
                 ->end()
                 ->fixXmlConfig('hydrator')
                 ->children()
@@ -420,6 +438,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('instance_class')->end()
                 ->scalarNode('class')->end()
                 ->scalarNode('id')->end()
+                ->scalarNode('namespace')->defaultNull()->end()
             ->end()
         ;
 

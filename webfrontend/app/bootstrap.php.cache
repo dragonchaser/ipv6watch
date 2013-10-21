@@ -705,7 +705,6 @@ $ip = $clientIps[0];
 foreach ($clientIps as $key => $clientIp) {
 if (IpUtils::checkIp($clientIp, $trustedProxies)) {
 unset($clientIps[$key]);
-continue;
 }
 }
 return $clientIps ? array_reverse($clientIps) : array($ip);
@@ -2174,11 +2173,11 @@ protected $booted;
 protected $name;
 protected $startTime;
 protected $loadClassCache;
-const VERSION ='2.3.6';
-const VERSION_ID ='20306';
+const VERSION ='2.3.7-DEV';
+const VERSION_ID ='20307';
 const MAJOR_VERSION ='2';
 const MINOR_VERSION ='3';
-const RELEASE_VERSION ='6';
+const RELEASE_VERSION ='7';
 const EXTRA_VERSION ='';
 public function __construct($environment, $debug)
 {
