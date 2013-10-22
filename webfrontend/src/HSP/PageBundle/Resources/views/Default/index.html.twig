@@ -2,7 +2,9 @@
 {% block title "Statistics" %}
 
 {% block content_header 'Statistics' %}
-
+{% block header_menu %}
+{{ knp_menu_render('HSPPageBundle:Builder:mainMenu') }}
+{% endblock %}
 {% block content %}
 	statistics block
 {% endblock %}

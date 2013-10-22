@@ -12,6 +12,7 @@ class __TwigTemplate_34a7e7ba3c38240add4ce5e2eed2f8741e7a2f2ff25cc97f4c5540300bf
         $this->blocks = array(
             'title' => array($this, 'block_title'),
             'content_header' => array($this, 'block_content_header'),
+            'header_menu' => array($this, 'block_header_menu'),
             'content' => array($this, 'block_content'),
         );
     }
@@ -38,10 +39,19 @@ class __TwigTemplate_34a7e7ba3c38240add4ce5e2eed2f8741e7a2f2ff25cc97f4c5540300bf
         echo "Statistics";
     }
 
-    // line 6
+    // line 5
+    public function block_header_menu($context, array $blocks = array())
+    {
+        // line 6
+        echo $this->env->getExtension('knp_menu')->render("HSPPageBundle:Builder:mainMenu");
+        echo "
+";
+    }
+
+    // line 8
     public function block_content($context, array $blocks = array())
     {
-        // line 7
+        // line 9
         echo "\tstatistics block
 ";
     }
@@ -58,6 +68,6 @@ class __TwigTemplate_34a7e7ba3c38240add4ce5e2eed2f8741e7a2f2ff25cc97f4c5540300bf
 
     public function getDebugInfo()
     {
-        return array (  45 => 7,  42 => 6,  36 => 4,  30 => 2,);
+        return array (  55 => 9,  52 => 8,  46 => 6,  43 => 5,  37 => 4,  31 => 2,);
     }
 }
