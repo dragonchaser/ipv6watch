@@ -1,50 +1,40 @@
 __author__ = 'daniel'
 #
 # a first demo client, quick&dirty, no error handling
-# python 3.3
+# python 2.7.5
+# requires paramiko
+# https://github.com/paramiko/paramiko
 #
-import subprocess
-import locale
+
 import re
-import xml.etree.cElementTree as et
-import http.client, urllib.parse
+import paramiko
 
-cache = False # for debugging purposes only, if true cache.txt instead of stdout is used
-host = 'localhost' # http host
-command = 'ip -6 neigh show'
-encoding = locale.getdefaultlocale()[1]
-encoding = "ISO8859-15"
+client = paramiko.SSHClient()
+client.load_system_host_keys()
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+print 'Connecting...'
+client.connect('194.95.109.129', username='tracker', password='quetschi12', timeout=20, allow_agent=False, look_for_keys=False)
+channel = client.invoke_shell()
+stdin = channel.makefile('wb')
+stdout = channel.makefile('rb')
 
-if cache:
-    lst = open('cache.txt').read().splitlines()
-else:
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
-    output = proc.stdout.read()
-    lst = output.decode(encoding).split('\n')
+# terminal length 0: set the number of lines of output to display on the terminal screen for the current session
+# show ipv6 neigh: display IPv6 neighbor discovery cache
+# exit: close the shell
+stdin.write('''
+terminal length 0
+show ipv6 neigh
+exit
+''')
+lines = stdout.read().splitlines()
+client.close()
+print 'Finished'
 
-root = et.Element("clients")
-
-p = re.compile(r'^(?P<ip>[\da-f:]*) dev .* lladdr (?P<mac>[\da-f:]*) (.* )?(STALE|REACHABLE)\Z', re.I)
-for line in lst:
+p = re.compile(r'^(?P<ip>[\da-f:]+)[ \t]+(?P<ttl>[\d\-]+)[ \t]+(?P<mac>[\da-f\.]+)[ \t]+(?P<state>(STALE|REACH))[ \t]+(?P<if>[a-zA-Z\d]+)\Z', re.I)
+for line in lines:
+    line = line.strip()
     result = p.match(line)
     if result:
-        print('ip:'+result.group('ip')+' mac:'+result.group('mac'))
-
-        # write xml tree
-        field = et.SubElement(root, 'client')
-        field.set('ip', result.group('ip'))
-        field.set('mac', result.group('mac'))
+        print('ip:' + result.group('ip') + ' mac:' + result.group('mac')+ ' state:' + result.group('state') +' interface:' + result.group('if'))
     else:
-        print('no match: '+line)
-
-# send xml to host/foo.php
-xmldata = et.tostring(root)
-params = urllib.parse.urlencode({'data': xmldata})
-print(params)
-headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
-conn = http.client.HTTPConnection(host)
-conn.request("POST", "/foo.php", params, headers)
-response = conn.getresponse()
-print(response.status, response.reason)
-data = response.read()
-conn.close()
+        print('no match: ' + line)
