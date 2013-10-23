@@ -1,0 +1,47 @@
+@CHARSET "US-ASCII";
+
+.header_menu {
+	clear: both;
+	height: 30px;
+	background-color: #FFFFFF;
+    border: 1px solid #DFDFDF;
+	border-radius: 5px;
+}
+
+.header_menu a {
+	color: #666666 !important;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.header_menu ul li {
+	float: left;
+	padding: 5px;
+	width: 150px;
+	border-radius: 5px;
+	height: 20px;
+	position: relative;
+}
+
+.header_menu ul li:hover {
+	background: #dfdfdf;
+}
+
+.header_menu ul li:hover a {
+}
+
+.header_menu ul li ul {
+	display: none;
+	position: absolute;
+	left: 0px;
+}
+
+.header_menu ul li:hover ul {
+	display: block;
+	float: left;
+	clear: both;
+}
+
+.header_menu ul li:hover ul li {
+	background: #dfdfdf;
+}

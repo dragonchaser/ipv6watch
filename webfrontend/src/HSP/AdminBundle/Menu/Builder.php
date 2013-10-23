@@ -10,20 +10,13 @@ class Builder extends ContainerAware
     {
         $menu = $factory->createItem('root'); 
         $menu->addChild('Home', array('route' => 'hsp_page_homepage'));
-
-        $menu->addChild('Admin', array('route' => 'hsp_admin_link'))
-             ->addChild('Logout', array('route' => 'fos_user_security_logout'));
+        $menu->addChild('Admin', array('route' => 'hsp_admin_link'));
         
-        $menu->addChild('Users', array('route' => 'hsp_admin_user_handling'))
-        	 #->addChild('Add User', array('route' => 'fos_user_security_logout'));
-        	 ->addChild('Add User', array('route' => 'fos_user_registration_register'));
-         
-        /*$menu->addChild('About Me', array(
-            'route' => 'page_show',
-            'routeParameters' => array('id' => 42)
-        ));*/
-        // ... add more children
-
+        
+        $menu->addChild('User', array('route' => 'hsp_admin_user_handling'))
+        	 ->addChild('Add User', array('route' => 'fos_user_registration_register'))
+        	 ->addChild('Change Password', array('route' => 'fos_user_change_password'))
+             ->addChild('Logout', array('route' => 'fos_user_security_logout'));
         return $menu;
     }
 }

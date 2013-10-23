@@ -1,4 +1,4 @@
-{% extends "TwigBundle::layout.html.twig" %}
+{% extends "HSPPageBundle::baselayout.html.twig" %}
 
 {% block head %}
     <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
@@ -7,32 +7,21 @@
 
 {% block title 'Administration' %}
 {% block body %}
+<div class="header_menu">
 {% block header_menu %}
 {% endblock %}
+</div>
     {% for flashMessage in app.session.flashbag.get('notice') %}
         <div class="flash-message">
             <em>Notice</em>: {{ flashMessage }}
         </div>
     {% endfor %}
 
-    {% block content_header %}
-        <ul id="menu">
-            {% block content_header_more %}
-                <li><a href="{{ path('_demo') }}">Demo Home</a></li>
-            {% endblock %}
-        </ul>
-
-        <div style="clear: both"></div>
-    {% endblock %}
+    <h1 class="pageHeadline">{% block content_header %}
+    {% endblock %}</h1>
 
     <div class="block">
         {% block content %}{% endblock %}
     </div>
 
-    {% if code is defined %}
-        <h2>Code behind this page</h2>
-        <div class="block">
-            <div class="symfony-content">{{ code|raw }}</div>
-        </div>
-    {% endif %}
 {% endblock %}
