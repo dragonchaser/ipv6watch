@@ -12,7 +12,6 @@ class Builder extends ContainerAware
         $menu->addChild('Home', array('route' => 'hsp_page_homepage'));
         $menu->addChild('Admin', array('route' => 'hsp_admin_link'));
         
-        
         $menu->addChild('User', array('route' => 'hsp_admin_user_handling'))
         	 ->addChild('Add User', array('route' => 'fos_user_registration_register'))
         	 ->addChild('Change Password', array('route' => 'fos_user_change_password'))

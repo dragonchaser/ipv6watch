@@ -71,4 +71,3 @@ fos_user:
     user_class: HSP\AdminBundle\Entity\User    
     group:
         group_class: HSP\AdminBundle\Entity\Group
-    

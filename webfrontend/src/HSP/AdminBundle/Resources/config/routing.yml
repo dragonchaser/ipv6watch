@@ -1,17 +1,23 @@
-#hsp_admin_homepage:
-#    #pattern:  /admin/{name}
-#    pattern:  /admin{trailingSlash}
-#    requirements: { trailingSlash: "[/]{0,1}" }
-#    defaults: { _controller: "HSPAdminBundle:Default:index"}
-    
 hsp_admin_link:
   pattern: /
   defaults: {_controller: "HSPAdminBundle:Default:index"}
 
 hsp_admin_user_handling:
-  pattern: /user
-  defaults: {_contorller: "HSPAdminBundle:Default:userHandling"}
+  pattern: /users
+  defaults: {_controller: "HSPAdminBundle:Default:userHandling"}
   
+hsp_admin_user_edit:
+  pattern: /users/{username}/edit
+  defaults: {_controller: "HSPAdminBundle:Default:userEditHandling"}
+
+hsp_admin_user_delete_confirm:
+  pattern: /users/{username}/deleteconfirm
+  defaults: {_controller: "HSPAdminBundle:Default:userDeleteConfirm"}  
+
+hsp_admin_user_delete:
+  pattern: /users/{username}/delete
+  defaults: {_controller: "HSPAdminBundle:Default:userDelete"}  
+
 ## stuff added by fos user
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
@@ -32,7 +38,14 @@ fos_user_register:
 fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
+
+fos_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /group
     
 fos_user_security_logout:
     pattern:  /logout
     defaults: { _controller: "FOSUserBundle:Security:logout" }
+    
+
+    

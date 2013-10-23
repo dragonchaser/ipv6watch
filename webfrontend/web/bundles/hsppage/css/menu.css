@@ -45,3 +45,32 @@
 .header_menu ul li:hover ul li {
 	background: #dfdfdf;
 }
+
+.header_menu .userData {
+	font-weight: bold;
+	float: right;
+	height: 20px;
+	padding: 5px;
+	border-radius: 5px;
+	background: #dfdfdf;
+	width: 100px;
+	position: relative;
+	text-align: center;
+}
+
+.header_menu .userData .userDetails {
+	display: none;
+	position: absolute;
+	right: -1px;
+	top: 27px;
+	background: #dfdfdf;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+	padding: 5px;
+	text-align: right;
+}
+
+.header_menu .userData:HOVER .userDetails{
+	display: block;
+}

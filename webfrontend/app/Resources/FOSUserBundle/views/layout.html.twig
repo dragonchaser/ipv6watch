@@ -1,9 +1,8 @@
 {% extends 'HSPPageBundle::layout.html.twig' %}
 
+{% block content_header 'Administration - Usermanagement' %}
+
 {% block title %}Administration{% endblock %}
-{% block header_menu %}
-{{ knp_menu_render('HSPAdminBundle:Builder:mainMenu') }}
-{% endblock %}
 {% block content %}
     {% block fos_user_content %}{% endblock %}
 {% endblock %}

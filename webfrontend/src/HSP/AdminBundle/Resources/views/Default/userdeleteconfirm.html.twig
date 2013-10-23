@@ -1,0 +1,20 @@
+{% extends "HSPPageBundle::layout.html.twig" %}
+
+{% block title "Administration" %}
+
+{% block content_header 'Administration' %}
+{% block content %}
+{% if username != 'admin' %}
+<center>
+	<h1>Are you sure that you want to delete the user: {{ username }}</h1>
+	<small><b>Note:</b> This step cannot be revoked!</small>
+<a href="#" onclick="history.back();">cancel</a>
+<a href="{{ path('hsp_admin_user_delete',{'username':username}) }}">confirm</a><br/>
+</center>
+{% else %}
+<center>
+<h1>You cannot (and you do not want to) delete the user admin!</h1>
+<a href="#" onclick="history.back();">cancel</a>
+</center>
+{% endif %}
+{% endblock %}

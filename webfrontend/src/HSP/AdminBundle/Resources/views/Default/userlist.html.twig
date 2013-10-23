@@ -1,0 +1,33 @@
+{% extends "HSPPageBundle::layout.html.twig" %}
+
+{% block title "Administration" %}
+
+{% block content_header 'Administration - Usermanagment' %}
+{% block content %}
+<div class="userListTable">
+<table class="userListTable">
+  <tr>
+    <th>User</th>
+    <th>Email</th>
+    <th>Roles</th>
+    <th>Actions</th>
+  </tr>
+
+{% for user in users %}
+  <tr class="{{ cycle(['odd','even'], loop.index0) }}">
+    <td>{{ user.username }}</td>
+    <td>{{ user.email }}</td>
+    <td>
+    {% for role in user.roles %}
+			{{ role }}<br/>
+		{% endfor %}
+    </td>
+    <td>
+    	<a href="{{ path('hsp_admin_user_edit',{'username':user.username}) }}">edit roles</a><br/>
+    	<a href="{{ path('hsp_admin_user_delete_confirm',{'username':user.username}) }}">delete</a>
+    </td>
+  </tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}

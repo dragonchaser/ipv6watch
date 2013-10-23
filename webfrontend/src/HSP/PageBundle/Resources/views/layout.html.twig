@@ -7,8 +7,19 @@
 
 {% block title 'Administration' %}
 {% block body %}
+
 <div class="header_menu">
 {% block header_menu %}
+{{ knp_menu_render('HSPAdminBundle:Builder:mainMenu') }}
+{% if app.user %}
+<div class="userData">{{ app.user.username }}
+	<div class="userDetails">
+		{% for role in app.user.roles %}
+			{{ role }}
+		{% endfor %}
+	</div>
+</div>
+{% endif %}
 {% endblock %}
 </div>
     {% for flashMessage in app.session.flashbag.get('notice') %}
