@@ -20,10 +20,20 @@ class Timelog
      * @ORM\id
      * @ORM\Column(type="integer")
      */
-    protected $id;
+    private $id;
     /**
      * @ORM\Column(type="datetime")
      * @ORM\ManyToOne(targetEntity="Logentry", inversedBy="Timelog")
      */
-    protected $lastseen;
+    private $lastseen;
+
+    public function setLastSeen()
+    {
+        $this->lastseen = new \DateTime('now');
+    }
+
+    function getLastSeen()
+    {
+        return $this->lastseen;
+    }
 }

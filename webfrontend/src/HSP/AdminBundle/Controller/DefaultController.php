@@ -6,13 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 // TODO: replace all 'name' => occurences by proper template
 class DefaultController extends Controller {
-	// public function indexAction($name)
 	public function indexAction() {
-		$user = $this->container->get ( 'security.context' )->getToken ()->getUser ();
-		// return $this->render('HSPAdminBundle:Default:index.html.twig', array('name' => $name));
 		return $this->render ( 'HSPAdminBundle:Default:index.html.twig', array (
-				'name' => "admin" 
-		) );
+            'name' => "admin"
+        ) );
 	}
 	public function userHandlingAction() {
 		$userManager = $this->get ( 'fos_user.user_manager' );
