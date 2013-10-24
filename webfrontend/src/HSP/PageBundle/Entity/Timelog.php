@@ -27,10 +27,13 @@ class Timelog
      */
     private $lastseen;
 
+    // commented out since all data is written by the client
+    /*
     public function setLastSeen()
     {
         $this->lastseen = new \DateTime('now');
     }
+    */
 
     function getLastSeen()
     {

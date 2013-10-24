@@ -42,7 +42,8 @@ class Logentry
      */
     private $Timelog;
 
-    public function setIpv6Address($ipv6Address)
+    // commented out since all data is written by the client
+    /*public function setIpv6Address($ipv6Address)
     {
         $this->ipv6Address = $ipv6Address;
     }
@@ -55,7 +56,7 @@ class Logentry
     public function setDateAdded()
     {
         $this->date_added = new \DateTime('now');
-    }
+    }*/
 
     public function getIpv6Address()
     {
