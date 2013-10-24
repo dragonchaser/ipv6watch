@@ -2,8 +2,8 @@
 
 namespace HSP\AdminBundle\Entity;
 
-use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Entity\User as BaseUser;
 
 /**
  * @ORM\Entity
@@ -19,7 +19,6 @@ class User extends BaseUser {
 
 	public function __construct() {
 		parent::__construct ();
-		//$this->roles = array('ROLE_ADMIN');
-		
-	}
+        $this->roles = array('ROLE_ADMIN');
+    }
 }
