@@ -14,18 +14,24 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ipv6_timelog")
  */
-class Timelog
+class IPV6TimeLog
 {
     /**
      * @ORM\id
      * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
     /**
      * @ORM\Column(type="datetime")
-     * @ORM\ManyToOne(targetEntity="Logentry", inversedBy="Timelog")
      */
     private $lastseen;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="IPV6LogEntry", inversedBy="IPV6TimeLog")
+     */
+    private $logentry;
 
     // commented out since all data is written by the client
     /*
