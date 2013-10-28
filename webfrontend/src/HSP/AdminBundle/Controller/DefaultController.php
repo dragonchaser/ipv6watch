@@ -3,8 +3,8 @@
 namespace HSP\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
-// TODO: replace all 'name' => occurences by proper template
 class DefaultController extends Controller {
 	public function indexAction() {
 		return $this->render ( 'HSPAdminBundle:Default:index.html.twig', array (
@@ -33,8 +33,11 @@ class DefaultController extends Controller {
 		$userManager = $this->get ( 'fos_user.user_manager' );
 		$user = $userManager->findUserBy(array('username' => $username));
 		$userManager->deleteUser($user);
-		return $this->render ( 'HSPAdminBundle:Default:userdelete.html.twig', array (
+		/*return $this->render ( 'HSPAdminBundle:Default:userdelete.html.twig', array (
 				'username' => $user 
-		) );
+		) );*/
+        $this->get('session')->getFlashBag()->set('notice', $user.' has been deleted!');
+
+        return new RedirectResponse($this->generateUrl('users'));
 	}
 }
