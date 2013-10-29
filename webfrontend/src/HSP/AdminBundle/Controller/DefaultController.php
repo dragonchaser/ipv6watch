@@ -26,7 +26,7 @@ class DefaultController extends Controller {
 	}
 	public function userDeleteConfirmAction($username) {
 		return $this->render ( 'HSPAdminBundle:Default:userdeleteconfirm.html.twig', array (
-				'username' => $username 
+				'username' => $username
 		) );
 	}
 	public function userDeleteAction($username) {

@@ -42,21 +42,27 @@
 	clear: both;
 }
 
+.header_menu ul li:hover ul li.last {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
 .header_menu ul li:hover ul li {
-	background: #dfdfdf;
+    background: #dfdfdf;
+    border-radius: 0;
 }
 
 .header_menu .userData {
-	font-weight: bold;
-	float: right;
-	height: 20px;
-	padding: 5px;
-	border-radius: 5px;
-	background: #dfdfdf;
-	width: 100px;
-	position: relative;
-	text-align: center;
-}
+font-weight: bold;
+float: right;
+height: 20px;
+padding: 5px;
+border-radius: 5px;
+background: #dfdfdf;
+width: 100px;
+position: relative;
+text-align: center;
+    }
 
 .header_menu .userData .userDetails {
 	display: none;
