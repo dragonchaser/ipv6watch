@@ -29,5 +29,5 @@ class User extends BaseUser {
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
      * )
      */
-    protected $groups;
+    //protected $groups;
 }
