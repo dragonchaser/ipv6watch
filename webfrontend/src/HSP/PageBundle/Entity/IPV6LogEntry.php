@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="ipv6_logentry", uniqueConstraints={@ORM\UniqueConstraint(name="macToipv6", columns={"ipv6Address", "macAddress"})})
  */
-class Logentry
+class IPV6LogEntry
 {
     /**
      * @ORM\Id
@@ -33,12 +33,22 @@ class Logentry
     private $macAddress;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $ipv4Address;
+    /**
      * @ORM\Column(type="datetime")
      */
     private $date_added;
 
     /**
-     * @ORM\OneToMany(targetEntity="Timelog", mappedBy="Logentry", cascade={"ALL"}, indexBy="Timelog")
+     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="IPV6RouterData", inversedBy="IPV6LogEntry")
+     */
+    private $RouterData;
+
+    /**
+     * @ORM\OneToMany(targetEntity="IPV6TimeLog", mappedBy="IPV6LogEntry", cascade={"ALL"}, indexBy="IPV6TimeLog")
      */
     private $Timelog;
 
@@ -56,6 +66,10 @@ class Logentry
     public function setDateAdded()
     {
         $this->date_added = new \DateTime('now');
+    }
+
+    public function setIpv4Address($ipv4Address) {
+        $this->ipv4Address = $ipv4Address;
     }*/
 
     public function getIpv6Address()
@@ -66,6 +80,11 @@ class Logentry
     public function getMacAddress()
     {
         return $this->macAddress;
+    }
+
+    public function getIpv4Address()
+    {
+        return $this->ipv4Address;
     }
 
     public function getDateAdded()
