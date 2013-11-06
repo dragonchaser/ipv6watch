@@ -1,0 +1,28 @@
+{% extends "HSPPageBundle::layout.html.twig" %}
+
+{% block title "Administration" %}
+
+{% block content_header 'Administration - Routers' %}
+{% block content %}
+    <div class="userListTable">
+        <table class="userListTable">
+            <tr>
+                <th>Status</th>
+                <th>Router</th>
+                <th>IP</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for router in routers %}
+                <tr class="{{ cycle(['odd','even'], loop.index0) }}">
+                    <td>{{ router.getActive() }}</td>
+                    <td>{{ router.getRouterName() }}</td>
+                    <td>{{ router.getIpv4Address() }}<br/>{{ router.getIpv6Address() }}</td>
+                    <td>
+                        <i>not yet implemented</i>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

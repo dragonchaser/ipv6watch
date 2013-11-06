@@ -26,7 +26,21 @@ class DefaultController extends Controller
 
 	public function routerHandlingAction()
 	{
-		return $this->render('HSPAdminBundle:Default:index.html.twig', array('name' => "foo"));
+		$repository = $this->getDoctrine()->getRepository('HSPPageBundle:IPV6RouterData');
+		$routers = $repository->findAll();
+		return $this->render('HSPAdminBundle:Default:routerlist.html.twig', array('routers' => $routers));
+	}
+
+	public function routerAddAction()
+	{
+		return $this->render('HSPAdminBundle:Default:index.html.twig', array('name' => "add router"));
+	}
+
+	public function leaseListAction()
+	{
+		$repository = $this->getDoctrine()->getRepository('HSPPageBundle:IPV6LogEntry');
+		$entries = $repository->findAll();
+		return $this->render('HSPAdminBundle:Default:leaselist.html.twig', array('leases' => $entries));
 	}
 
 	public function userEditHandlingAction($username)

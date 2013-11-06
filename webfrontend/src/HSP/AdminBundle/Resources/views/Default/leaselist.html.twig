@@ -1,0 +1,28 @@
+{% extends "HSPPageBundle::layout.html.twig" %}
+
+{% block title "Administration" %}
+
+{% block content_header 'Administration - Leases' %}
+{% block content %}
+    <div class="userListTable">
+        <table class="userListTable">
+            <tr>
+                <th>Status</th>
+                <th>Router</th>
+                <th>IP</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for lease in leases %}
+                <tr class="{{ cycle(['odd','even'], loop.index0) }}">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <i>not yet implemented</i>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

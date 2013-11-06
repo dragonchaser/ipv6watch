@@ -30,7 +30,7 @@ class IPV6CronRuns
 	private $starttime;
 
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="datetime",options={"default" = NULL}, nullable=true)
 	 */
 	private $endtime;
 

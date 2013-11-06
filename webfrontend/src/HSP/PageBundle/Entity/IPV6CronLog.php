@@ -34,7 +34,7 @@ class IPV6CronLog
 	 */
 	private $time;
 	/**
-	 * @ORM\Column(type="integer");
+	 * @ORM\Column(type="integer",options={"default" = NULL}, nullable=true);
 	 * @ORM\ManyToOne(targetEntity="IPV6CronRuns", inversedBy="IPV6CronLog")
 	 */
 	private $routerid;
