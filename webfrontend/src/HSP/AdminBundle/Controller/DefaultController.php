@@ -24,6 +24,11 @@ class DefaultController extends Controller
 		));
 	}
 
+	public function routerHandlingAction()
+	{
+		return $this->render('HSPAdminBundle:Default:index.html.twig', array('name' => "foo"));
+	}
+
 	public function userEditHandlingAction($username)
 	{
 		return $this->render('HSPAdminBundle:Default:useredit.html.twig', array(

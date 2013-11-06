@@ -48,4 +48,6 @@ fos_user_security_logout:
     defaults: { _controller: "FOSUserBundle:Security:logout" }
     
 
-    
+hsp_admin_router_handling:
+    pattern: /router
+    defaults: {_controller: "HSPAdminBundle:Default:routerHandling"}
