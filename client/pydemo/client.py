@@ -3,7 +3,17 @@ import re
 import paramiko
 import threading
 import ConfigParser
+from time import time
 from sqlalchemy import create_engine, select, sql, Table, exc, func, MetaData
+
+
+def writelog(entry, etype, routerid=0):
+    if routerid > 0:
+        tbl_cronlog.insert().values(
+            {'cronid': cronrunid, 'time': func.now(), 'routerid': routerid, 'type': etype, 'logentry': entry}).execute()
+    else:
+        tbl_cronlog.insert().values(
+            {'cronid': cronrunid, 'time': func.now(), 'type': etype, 'logentry': entry}).execute()
 
 
 class Router(threading.Thread):
@@ -19,6 +29,7 @@ class Router(threading.Thread):
     def run(self):
         try:
             print 'Thread %i started' % self.id
+            writelog('Connecting', 0, self.id)
             sshclient = paramiko.SSHClient()
             sshclient.load_system_host_keys()
             sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -31,11 +42,7 @@ class Router(threading.Thread):
             # terminal length 0: set the number of lines of output to display on the terminal screen for the current session
             # show ipv6 neigh: display IPv6 neighbor discovery cache
             # exit: close the shell
-            stdin.write('''
-            terminal length 0
-            show ipv6 neigh
-            exit
-            ''')
+            stdin.write("terminal length 0\nshow ipv6 neigh\nexit\n")
             lines = stdout.read().splitlines()
             timestamp = datetime.datetime.now()
             sshclient.close()
@@ -52,9 +59,11 @@ class Router(threading.Thread):
                                result.group('age'), self.id,
                                result.group('if'), timestamp - datetime.timedelta(minutes=int(result.group('age')))))
             print 'Thread finished: ' + self.ip
+            writelog('Finished with %i results' % len(clients), 0, self.id)
             self.neighbors = clients
         except Exception, e:
             print 'Thread %i failed: %s' % (self.id, str(e))
+            writelog('Error: %s' % str(e), 1, self.id)
 
 
 class Client:
@@ -69,18 +78,28 @@ class Client:
 
 
 print 'Main Thread started'
+starttime = time()
 print 'Parsing Config'
 config = ConfigParser.ConfigParser()
 config.read('config.cfg')
 
 engine = create_engine(
-    config.get('Database', 'type') + '://' + config.get('Database', 'user') + ':' + config.get('Database', 'pass') + '@' + config.get(
-        'Database', 'host') + '/' + config.get('Database', 'database'), echo=True)
+    config.get('Database', 'type') + '://' + config.get('Database', 'user') + ':' + config.get('Database',
+                                                                                               'pass') + '@' + config.get(
+        'Database', 'host') + '/' + config.get('Database', 'database'), echo=False)
 conn = engine.connect()
 metadata = MetaData(engine)
+
 tbl_router = Table(u'ipv6_routerdata', metadata, autoload=True)
 tbl_logentry = Table(u'ipv6_logentry', metadata, autoload=True)
 tbl_timelog = Table(u'ipv6_timelog', metadata, autoload=True)
+tbl_cronruns = Table(u'ipv6_cronruns', metadata, autoload=True)
+tbl_cronlog = Table(u'ipv6_cronlog', metadata, autoload=True)
+
+res = tbl_cronruns.insert().values({'starttime': func.now()}).execute()
+cronrunid = res.lastrowid
+writelog('Main Thread started', 0)
+
 res = select([tbl_router.c.id, tbl_router.c.routerName, tbl_router.c.ipv4Address, tbl_router.c.username,
               tbl_router.c.password]).where(tbl_router.c.active == 1).execute()
 
@@ -108,7 +127,12 @@ for c in results:
             sql.and_(tbl_logentry.c.ipv6Address == c.ip, tbl_logentry.c.macAddress == c.mac)).execute()
         logid = res.fetchone()[0]
     finally:
-        res = tbl_timelog.insert().values({'lastseen': c.seen, 'logentry': logid}).execute()
+        tbl_timelog.insert().values({'lastseen': c.seen, 'logentry': logid}).execute()
 
+tbl_cronruns.update().values({'endtime': func.now()}).where(tbl_cronruns.c.id == cronrunid).execute()
+
+writelog('Main Thread finished with %i results from %i routers' % (len(results), len(threads)), 0)
 conn.close()
 print 'Main Thread finished'
+delta = 'runtime: %f' % (time() - starttime)
+print delta
