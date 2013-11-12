@@ -31,10 +31,13 @@ class Router(threading.Thread):
             print 'Thread %i started' % self.id
             writelog('Connecting', 0, self.id)
             sshclient = paramiko.SSHClient()
-            sshclient.load_system_host_keys()
+            try:
+                sshclient.load_host_keys('hostkeys.cfg')
+            except IOError:
+                open('hostkeys.cfg', 'w').close()
+                sshclient.load_host_keys('hostkeys.cfg')
             sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            sshclient.connect(self.ip, username=self.username, password=self.password, timeout=20, allow_agent=False,
-                              look_for_keys=False)
+            sshclient.connect(self.ip, username=self.username, password=self.password, timeout=20)
             channel = sshclient.invoke_shell()
             stdin = channel.makefile('wb')
             stdout = channel.makefile('rb')
@@ -46,6 +49,7 @@ class Router(threading.Thread):
             lines = stdout.read().splitlines()
             timestamp = datetime.datetime.now()
             sshclient.close()
+            sshclient.save_host_keys('hostkeys.cfg')
             p = re.compile(
                 r'^(?P<ip>[\da-f:]+)[ \t]+(?P<age>[\d\-]+)[ \t]+(?P<mac>[\da-f\.]+)[ \t]+(?P<state>(STALE|REACH))[ \t]+(?P<if>[a-zA-Z\d]+)\Z',
                 re.I)
@@ -117,6 +121,8 @@ for t in threads:
     t.join()
     results.extend(t.neighbors)
 
+print 'Writing Logs to Database'
+
 for c in results:
     try:
         res = tbl_logentry.insert().values(
@@ -130,7 +136,7 @@ for c in results:
         tbl_timelog.insert().values({'lastseen': c.seen, 'logentry': logid}).execute()
 
 tbl_cronruns.update().values({'endtime': func.now()}).where(tbl_cronruns.c.id == cronrunid).execute()
-
+print 'Database finished'
 writelog('Main Thread finished with %i results from %i routers' % (len(results), len(threads)), 0)
 conn.close()
 print 'Main Thread finished'
