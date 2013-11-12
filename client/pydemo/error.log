@@ -1,0 +1,3 @@
+2013-11-12 17:07:54 Fatal Error: (OperationalError) (1045, "Access denied for user 'test'@'localhost' (using password: YES)") None None
+2013-11-12 17:08:07 Fatal Error: (OperationalError) (1045, "Access denied for user 'test'@'localhost' (using password: YES)") None None
+2013-11-12 17:08:59 Fatal Error: (OperationalError) (1045, "Access denied for user 'test'@'localhost' (using password: YES)") None None

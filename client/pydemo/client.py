@@ -3,8 +3,9 @@ import re
 import paramiko
 import threading
 import ConfigParser
-from time import time
+from time import time, strftime
 from sqlalchemy import create_engine, select, sql, Table, exc, func, MetaData
+import sys
 
 
 def writelog(entry, etype, routerid=0):
@@ -91,7 +92,16 @@ engine = create_engine(
     config.get('Database', 'type') + '://' + config.get('Database', 'user') + ':' + config.get('Database',
                                                                                                'pass') + '@' + config.get(
         'Database', 'host') + '/' + config.get('Database', 'database'), echo=False)
-conn = engine.connect()
+
+try:
+    conn = engine.connect()
+except exc.OperationalError, e:
+    f = open('error.log','a')
+    f.write('%s Fatal Error: %s\n' % (strftime("%Y-%m-%d %H:%M:%S"), str(e)))
+    f.close()
+    print str(e)
+    sys.exit(0)
+
 metadata = MetaData(engine)
 
 tbl_router = Table(u'ipv6_routerdata', metadata, autoload=True)
