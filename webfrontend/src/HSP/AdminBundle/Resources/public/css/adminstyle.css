@@ -1,0 +1,11 @@
+div.block form div div:nth-child(odd) {
+	background: #DFDFDF;
+}
+
+div.block form div div label {
+	width: 250px;
+	word-break: normal;
+	display: inline-block;
+	font-weight: bold;
+	padding: 5px;
+}

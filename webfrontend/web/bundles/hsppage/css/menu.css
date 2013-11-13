@@ -33,7 +33,7 @@
 .header_menu ul li ul {
 	display: none;
 	position: absolute;
-	left: 0px;
+	left: 0;
 }
 
 .header_menu ul li:hover ul {

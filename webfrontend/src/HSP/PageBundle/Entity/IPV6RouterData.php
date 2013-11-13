@@ -30,12 +30,12 @@ class IPV6RouterData
 	private $routerName;
 
 	/**
-	 * @ORM\Column(type="string");
+	 * @ORM\Column(type="string", nullable=true);
 	 */
 	private $ipv6Address;
 
 	/**
-	 * @ORM\Column(type="string");
+	 * @ORM\Column(type="string", nullable=true);
 	 */
 	private $macAddress;
 
