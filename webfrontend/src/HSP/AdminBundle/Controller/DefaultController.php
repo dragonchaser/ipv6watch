@@ -1,5 +1,5 @@
 <?php
-
+/* TODO: add acl handling */
 namespace HSP\AdminBundle\Controller;
 
 use HSP\PageBundle\Entity\IPV6RouterData;
@@ -48,22 +48,21 @@ class DefaultController extends Controller
 	 * create user form to add a router, and create new entry if postdata is given
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function routerAddAction(Request $request)
+	public function routerAddEditAction($routerid = -1, Request $request)
 	{
 		$tmpRouter = new IPV6RouterData();
 		$form = $this->createFormBuilder($tmpRouter)
 			->add('routername', 'text', array('label' => 'Routername', 'required' => true))
 			->add('ipv6Address', 'text', array('label' => 'IPV6 address', 'required' => false))
-			->add('ipv4Address', 'text', array('label' => 'IPV4 address', 'required' => true))
+			->add('ipv4Address', 'text', array('label' => 'IPV4 address / FQDN', 'required' => true))
 			->add('macAddress', 'text', array('label' => 'Macaddress', 'required' => false))
 			->add('userName', 'text', array('label' => 'SSH username', 'required' => true))
 			->add('password', 'password', array('label' => 'SSH password', 'required' => true))
-			->add('active', 'checkbox', array('label' => 'Status (checked = active, unchecked = disabled)', 'required' => false))
+			->add('active', 'checkbox', array('label' => 'Status (checked = active, unchecked = disabled)', 'required' => false, 'value' => 1))
 			->add('save', 'submit')
 			->getForm();
 		$form->handleRequest($request);
 		if ($form->isValid()) {
-			/* TODO: add form validation for ipv4 addresses etc */
 			$this->get('session')->getFlashBag()->set('notice', 'added router ' . $tmpRouter->getRouterName());
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($tmpRouter);
@@ -73,14 +72,73 @@ class DefaultController extends Controller
 	}
 
 	/**
+	 * delete router from list
+	 * TODO: implement!
+	 * @param $routerid
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function routerDeleteAction($routerid, Request $request)
+	{
+		return $this->render('HSPAdminBundle:Default:index.html.twig', array('name' => $routerid));
+	}
+
+	/**
 	 * generate list of ipv6 leases
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function leaseListAction()
+	public function leaseListAction(Request $request)
 	{
+		$form = $this->createFormBuilder()
+			->add('filter', 'text', array('label' => 'search for', 'required' => false))
+			->add('filterBy', 'choice', array(
+				'choices' => array(
+					'any' => 'any',
+					'ipv6' => 'IPV6 Address',
+					'ipv4' => 'IPV4 Address',
+					'max' => 'MAC Address'
+				),
+				'label' => 'in'
+			))
+			->add('submit', 'submit')
+			->getForm();
+		$form->handleRequest($request);
+		$formData = $form->getData();
+		if (!isset($formData['filterBy'])) $formData['filterBy'] = 'any';
+		if (!isset($formData['filter'])) $formData['filter'] = ''; else $formData['filter'] = trim($formData['filter']);
+		$this->get('session')->getFlashBag()->set('notice', $formData['filterBy']);
 		$repository = $this->getDoctrine()->getRepository('HSPPageBundle:IPV6LogEntry');
-		$entries = $repository->findAll();
-		return $this->render('HSPAdminBundle:Default:leaselist.html.twig', array('leases' => $entries));
+		if (empty($formData['filter']))
+			$entries = $repository->findAll();
+		else
+			switch ($formData['filter']) {
+				case 'ipv6':
+					$entries = $repository->findByipv6Address($formData['filter']);
+					break;
+				case 'ipv4':
+					$entries = $repository->findByipv4Address($formData['filter']);
+					break;
+				case 'mac':
+					$entries = $repository->findBymacAddress($formData['filter']);
+					break;
+				default:
+				case 'any';
+					$entries = $repository->findByipv6Address($formData['filter']);
+					break;
+			}
+		return $this->render('HSPAdminBundle:Default:leaselist.html.twig',
+			array('leases' => $entries, 'form' => $form->createView()));
+	}
+
+	/**
+	 * lists all existing export files in export folder and allows to download / delete then
+	 * TODO: implement!
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function leaseExportsAction(Request $request)
+	{
+		return $this->render('HSPAdminBundle:Default:index.html.twig', array('name' => 'leaseexport'));
 	}
 
 	/**
@@ -90,7 +148,6 @@ class DefaultController extends Controller
 	 */
 	public function userEditHandlingAction($username)
 	{
-		/* TODO: add acl handling */
 		return $this->render('HSPAdminBundle:Default:useredit.html.twig', array(
 			'username' => $username
 		));

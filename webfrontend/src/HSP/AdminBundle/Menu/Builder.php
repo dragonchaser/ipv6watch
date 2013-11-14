@@ -17,7 +17,8 @@ class Builder extends ContainerAware
 			->addChild('Change Password', array('route' => 'fos_user_change_password'))->getParent()
 			->addChild('Logout', array('route' => 'fos_user_security_logout'));
 
-		$menu->addChild('Leases', array('route' => 'hsp_admin_leaselist'));
+		$menu->addChild('Leases', array('route' => 'hsp_admin_leaselist'))
+			->addChild('Exports', array('route' => 'hsp_admin_lease_exports'));
 
 		$menu->addChild('Router', array('route' => 'hsp_admin_router_handling'))
 			->addChild('Add Router', array('route' => 'hsp_admin_router_add'));

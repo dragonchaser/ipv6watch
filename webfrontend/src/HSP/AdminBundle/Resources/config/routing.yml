@@ -54,8 +54,20 @@ hsp_admin_router_handling:
 
 hsp_admin_router_add:
   pattern: /router/add
-  defaults: {_controller: "HSPAdminBundle:Default:routerAdd"}
+  defaults: {_controller: "HSPAdminBundle:Default:routerAddEdit"}
+
+hsp_admin_router_edit:
+  pattern: /router/edit/{routerid}
+  defaults: {_controller: "HSPAdminBundle:Default:routerAddEdit"}
+
+hsp_admin_router_delete:
+  pattern: /router/delete/{routerid}
+  defaults: {_controller: "HSPAdminBundle:Default:routerDelete"}
 
 hsp_admin_leaselist:
   pattern: /leaselist
   defaults: {_controller: "HSPAdminBundle:Default:leaseList"}
+
+hsp_admin_lease_exports:
+  pattern: /leaselist/exports
+  defaults: {_controller: "HSPAdminBundle:Default:leaseExports"}

@@ -9,7 +9,7 @@
             <tr>
                 <th>Status</th>
                 <th>Router</th>
-                <th>IP</th>
+                <th>IP/FQDN</th>
                 <th>Actions</th>
             </tr>
 
@@ -19,7 +19,8 @@
                     <td>{{ router.getRouterName() }}</td>
                     <td>{{ router.getIpv4Address() }}<br/>{{ router.getIpv6Address() }}</td>
                     <td>
-                        <i>not yet implemented</i>
+                        <a href="{{ path('hsp_admin_router_delete',{'routerid':router.getid()}) }}">delete</a><br/>
+                        <a href="{{ path('hsp_admin_router_edit', {'routerid':router.getid()}) }}">edit</a>
                     </td>
                 </tr>
             {% endfor %}

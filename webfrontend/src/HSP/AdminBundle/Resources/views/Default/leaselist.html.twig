@@ -4,23 +4,24 @@
 
 {% block content_header 'Administration - Leases' %}
 {% block content %}
+    <div class="filterForm">
+        {{ form(form) }}
+    </div>
     <div class="userListTable">
         <table class="userListTable">
             <tr>
-                <th>Status</th>
-                <th>Router</th>
-                <th>IP</th>
-                <th>Actions</th>
+                <th>IPV6</th>
+                <th>IPV4</th>
+                <th>MAC</th>
+                <th>Last seen</th>
             </tr>
 
             {% for lease in leases %}
                 <tr class="{{ cycle(['odd','even'], loop.index0) }}">
+                    <td>{{ lease.getIpv6Address }}</td>
+                    <td>{{ lease.getIpv4Address }}</td>
+                    <td>{{ lease.getMacAddress }}</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <i>not yet implemented</i>
-                    </td>
                 </tr>
             {% endfor %}
         </table>

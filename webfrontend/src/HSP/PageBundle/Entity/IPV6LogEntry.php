@@ -16,79 +16,79 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class IPV6LogEntry
 {
-    /**
-     * @ORM\Id
-     * @Orm\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $ipv6Address;
+	/**
+	 * @ORM\Id
+	 * @Orm\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $id;
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	private $ipv6Address;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $macAddress;
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	private $macAddress;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $ipv4Address;
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $date_added;
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	private $ipv4Address;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	private $date_added;
 
-    /**
-     * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="IPV6RouterData", inversedBy="IPV6LogEntry")
-     */
-    private $RouterData;
+	/**
+	 * @ORM\Column(type="integer")
+	 * @ORM\ManyToOne(targetEntity="IPV6RouterData", inversedBy="IPV6LogEntry")
+	 */
+	private $RouterData;
 
-    /**
-     * @ORM\OneToMany(targetEntity="IPV6TimeLog", mappedBy="IPV6LogEntry", cascade={"ALL"}, indexBy="IPV6TimeLog")
-     */
-    private $Timelog;
+	/**
+	 * @ORM\OneToMany(targetEntity="IPV6TimeLog", mappedBy="IPV6LogEntry", cascade={"ALL"}, indexBy="IPV6TimeLog")
+	 */
+	private $Timelog;
 
-    // commented out since all data is written by the client
-    /*public function setIpv6Address($ipv6Address)
-    {
-        $this->ipv6Address = $ipv6Address;
-    }
+	// commented out since all data is written by the client
+	/*public function setIpv6Address($ipv6Address)
+	{
+			$this->ipv6Address = $ipv6Address;
+	}
 
-    public function setMacAddress($macAddress)
-    {
-        $this->macAddress = $macAddress;
-    }
+	public function setMacAddress($macAddress)
+	{
+			$this->macAddress = $macAddress;
+	}
 
-    public function setDateAdded()
-    {
-        $this->date_added = new \DateTime('now');
-    }
+	public function setDateAdded()
+	{
+			$this->date_added = new \DateTime('now');
+	}
 
-    public function setIpv4Address($ipv4Address) {
-        $this->ipv4Address = $ipv4Address;
-    }*/
+	public function setIpv4Address($ipv4Address) {
+			$this->ipv4Address = $ipv4Address;
+	}*/
 
-    public function getIpv6Address()
-    {
-        return $this->ipv6Address;
-    }
+	public function getIpv6Address()
+	{
+		return $this->ipv6Address;
+	}
 
-    public function getMacAddress()
-    {
-        return $this->macAddress;
-    }
+	public function getMacAddress()
+	{
+		return $this->macAddress;
+	}
 
-    public function getIpv4Address()
-    {
-        return $this->ipv4Address;
-    }
+	public function getIpv4Address()
+	{
+		return $this->ipv4Address;
+	}
 
-    public function getDateAdded()
-    {
-        return $this->date_added;
-    }
+	public function getDateAdded()
+	{
+		return $this->date_added;
+	}
 }
