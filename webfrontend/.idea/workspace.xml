@@ -4,9 +4,7 @@
     <option name="ANALYSIS_IN_BACKGROUND" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="816bfbf8-a384-49d8-8c18-8e0dd50b4391" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../README.md" afterPath="$PROJECT_DIR$/../README.md" />
-    </list>
+    <list default="true" id="816bfbf8-a384-49d8-8c18-8e0dd50b4391" name="Default" comment="" />
     <ignored path="webfrontend.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
