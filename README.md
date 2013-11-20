@@ -15,7 +15,6 @@ Licence
 The project itsself is licenced under <a href="LICENSE">GPLv3</a>.<br>
 The used symfony2 framework and 3rd-party bundles use MIT or BSD licence.
 - - - 
-
 Quickstart
 ==========
 
@@ -30,7 +29,7 @@ git clone https://github.com/dragonchaser/ipv6watch.git
 Configure the database
 ----------------------
 
-Setup the database of your choice (only postgres and mysql will be supported by this project).
+Setup the database of your choice (we support only postgres and mysql).
 Edit `webfrontend/app/config/parameters.yml` and `client/pydemo/config.cfg` to suit your needs.
 
 Setup database schema
