@@ -16,7 +16,10 @@ Contributors
 - <a href="https://github.com/dragonchaser">Christian Richter</a>
 - <a href="https://github.com/danielniedermeyer">Daniel Niedermeyer</a>
 - Benjamin Hiefner
+
+
 - - -
+
 Quickstart
 ==========
 Clone the project
