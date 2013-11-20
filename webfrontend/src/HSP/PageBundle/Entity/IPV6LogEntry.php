@@ -1,6 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
  * User: chaser
  * Date: 10/24/13
  * Time: 2:59 PM
@@ -42,6 +41,11 @@ class IPV6LogEntry
 	private $date_added;
 
 	/**
+	 * @ORM\Column(type="integer", length=1, options={"default"=0})
+	 */
+	private $hasBeenExported;
+
+	/**
 	 * @ORM\Column(type="integer")
 	 * @ORM\ManyToOne(targetEntity="IPV6RouterData", inversedBy="IPV6LogEntry")
 	 */
@@ -68,6 +72,10 @@ class IPV6LogEntry
 			$this->date_added = new \DateTime('now');
 	}
 
+	public function setHasBeenExportet($hasBeenExported = 0)
+	{
+		$this->hasBeenExportet = $hasBeenExported;
+
 	public function setIpv4Address($ipv4Address) {
 			$this->ipv4Address = $ipv4Address;
 	}*/
@@ -90,5 +98,10 @@ class IPV6LogEntry
 	public function getDateAdded()
 	{
 		return $this->date_added;
+	}
+
+	public function getHasBeenExported()
+	{
+		return $this->hasBeenExported;
 	}
 }
