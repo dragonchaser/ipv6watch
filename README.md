@@ -41,7 +41,8 @@ Create initial user
 -------------------
 Run `webfrontend/app/console ipv6watch:createuser`
 
+
 Use the project
-2---------------
+---------------
 
 Navigate to to the webpage frontend using your webbrowser (e.g. `http://localhost/ipv6watch`) and setup your cron to run client/pydemo/client.py.
