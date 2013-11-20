@@ -6,7 +6,7 @@ For further details please read the <a href="docs/README.md" target="_blank">doc
 
 <b>Note:</b> This is an unstable WIP alpha-release! Most of the code is not working as expected yet, use it at your own risk!
 - - -
-Licence
+License
 =======
 The project itsself is licenced under <a href="LICENSE">GPLv3</a>.<br>
 The used symfony2 framework and 3rd-party bundles use MIT or BSD licence.
@@ -17,8 +17,6 @@ Contributors
 - <a href="https://github.com/danielniedermeyer">Daniel Niedermeyer</a>
 - Benjamin Hiefner
 
-
-- - -
 
 Quickstart
 ==========
