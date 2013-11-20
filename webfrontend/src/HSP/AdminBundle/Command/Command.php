@@ -12,7 +12,7 @@ class Command extends ContainerAwareCommand
 	protected function configure()
 	{
 		$this
-			->setName('hsp:createuser')
+			->setName('ipv6watch:createuser')
 			->setDescription('create initial user');
 	}
 
