@@ -46,23 +46,43 @@ class Router(threading.Thread):
             # terminal length 0: set the number of lines of output to display on the terminal screen for the current session
             # show ipv6 neigh: display IPv6 neighbor discovery cache
             # exit: close the shell
-            stdin.write("terminal length 0\nshow ipv6 neigh\nexit\n")
-            lines = stdout.read().splitlines()
+            stdin.write("terminal length 0\nshow ipv6 neigh\nshow ip arp\nexit\n")
+            lines = stdout.readlines()
             timestamp = datetime.datetime.now()
             sshclient.close()
             sshclient.save_host_keys('hostkeys.cfg')
-            p = re.compile(
+            p6 = re.compile(
                 r'^(?P<ip>[\da-f:]+)[ \t]+(?P<age>[\d\-]+)[ \t]+(?P<mac>[\da-f\.]+)[ \t]+(?P<state>(STALE|REACH))[ \t]+(?P<if>[a-zA-Z\d]+)\Z',
                 re.I)
+            p4 = re.compile(
+                r'^(?P<protocol>[\da-zA-Z]+)[ \t]+(?P<ip>[\d\.]+)[ \t]+(?P<age>[\d\-]+)[ \t]+(?P<mac>[\da-f\.]+)[ \t]+(?P<type>(ARPA))[ \t]+(?P<if>[a-zA-Z\d]+)\Z',
+                re.I)
             clients = []
+            mode = 0 #0: no mode, 1: v6 neigh, 2: arp-cache
             for line in lines:
                 line = line.strip()
-                result = p.match(line)
-                if result:
-                    clients.append(
-                        Client(result.group('ip'), result.group('mac').replace('.', ''), result.group('state'),
-                               result.group('age'), self.id,
-                               result.group('if'), timestamp - datetime.timedelta(minutes=int(result.group('age')))))
+                if line.find('>show ipv6 neigh') > 0:
+                    mode = 1
+                    print 'mode changed: v6 neigh'
+                elif line.find('>show ip arp') > 0:
+                    mode = 2
+                    print 'mode changed: arp'
+
+                # parse ipv6 neigh cache
+                if mode == 1:
+                    result = p6.match(line)
+                    if result:
+                        clients.append(
+                            Client(result.group('ip'), result.group('mac').replace('.', ''), result.group('state'),
+                                   result.group('age'), self.id,
+                                   result.group('if'),
+                                   timestamp - datetime.timedelta(minutes=int(result.group('age')))))
+
+                # parse arp cache
+                elif mode == 2:
+                    result = p4.match(line)
+                    if result:
+                        print result.group('ip') + ' | ' + result.group('mac')
             print 'Thread finished: ' + self.ip
             writelog('Finished with %i results' % len(clients), 0, self.id)
             self.neighbors = clients
@@ -96,7 +116,7 @@ engine = create_engine(
 try:
     conn = engine.connect()
 except exc.OperationalError, e:
-    f = open('error.log','a')
+    f = open('error.log', 'a')
     f.write('%s Fatal Error: %s\n' % (strftime("%Y-%m-%d %H:%M:%S"), str(e)))
     f.close()
     print str(e)
@@ -150,5 +170,4 @@ print 'Database finished'
 writelog('Main Thread finished with %i results from %i routers' % (len(results), len(threads)), 0)
 conn.close()
 print 'Main Thread finished'
-delta = 'runtime: %f' % (time() - starttime)
-print delta
+print 'runtime: %f' % (time() - starttime)
