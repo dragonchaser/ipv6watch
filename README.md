@@ -21,7 +21,7 @@ Clone the project
 
 Clone the project to a directory of your choice, which can be accessed by your webserver (nginx, apache etc.)
 ```
-git clone https://github.com/dragonchaser/ipv6watch.git
+git clone https://github.com/ipv6Watch/ipv6watch.git
 ```
 
 Configure the database
