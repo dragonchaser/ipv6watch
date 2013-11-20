@@ -14,7 +14,7 @@ For further details please read the <a href="docs/documentation" target="_blank"
 Licence
 =======
 
-The project itsself is licenced under <a href="LICENCE">GPLv3</a>.<br>
+The project itsself is licenced under <a href="LICENSE">GPLv3</a>.<br>
 The symfony2 framework uses MIT licence.
 
 - - - 
