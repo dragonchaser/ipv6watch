@@ -1,0 +1,29 @@
+div.block form div div:nth-child(odd) {
+	background: #DFDFDF;
+}
+
+div.block form div div label {
+	width: 250px;
+	word-break: normal;
+	display: inline-block;
+	font-weight: bold;
+	padding: 5px;
+}
+
+div.block div.filterForm {
+	border: solid 1px #DFDFDF;
+	border-radius: 5px;
+	height: 30px;
+	background: #DFDFDF;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+div.block div.filterForm form div div {
+	float: left;
+}
+
+div.block div.filterForm form div div label {
+	float: left;
+	width: auto;
+}
