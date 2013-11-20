@@ -25,7 +25,6 @@ Clone the project to a directory of your choice, which can be accessed by your w
 ```
 git clone https://github.com/ipv6Watch/ipv6watch.git
 ```
-
 Configure the database
 ----------------------
 Setup the database of your choice (we support only postgres and mysql).
