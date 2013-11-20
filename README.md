@@ -33,7 +33,7 @@ Edit `webfrontend/app/config/parameters.yml` and `client/pydemo/config.cfg` to s
 
 Setup database schema
 ---------------------
-Run `webfrontend/app/console doctirne:schema:create`.
+Run `webfrontend/app/console doctrine:schema:create`.
 
 Create initial user
 -------------------
