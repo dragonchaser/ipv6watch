@@ -2,9 +2,7 @@ ipv6Watch
 =========
 
 ipv6Watch is a small suite, capable of tracking and monitoring the ipv6 leases within your network using ipv6 neighborhood discovery via ssh from your routers.
-
 The suite consists of a webfrontend, written in symfony2 and a client written in python.
-
 For further details please read the <a href="docs/README.md" target="_blank">documentation</a>
 
 <b>Note:</b> This is an unstable WIP alpha-release! Most of the code is not working as expected yet, use it at your own risk!
