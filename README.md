@@ -22,7 +22,7 @@ Quickstart
 ==========
 Clone the project
 -----------------
-Clone the project to a directory of your choice, which can be accessed by your webserver (nginx, apache or )
+Clone the project to a directory of your choice, which can be accessed by your webserver (nginx, apache or alternativly you could use the build in webserver of symfony2 (run `app/console server:run`))
 ```
 git clone https://github.com/ipv6Watch/ipv6watch.git
 ```
