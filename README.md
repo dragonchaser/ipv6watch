@@ -15,7 +15,7 @@ Licence
 =======
 
 The project itsself is licenced under <a href="LICENSE">GPLv3</a>.<br>
-The symfony2 framework uses MIT licence.
+The used symfony2 framework uses MIT or BSD licence.
 
 - - - 
 
