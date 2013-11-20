@@ -5,12 +5,12 @@ The suite consists of a webfrontend, written in symfony2 and a client written in
 For further details please read the <a href="docs/README.md" target="_blank">documentation</a>.
 
 <b>Note:</b> This is an unstable WIP alpha-release! Most of the code is not working as expected yet, use it at your own risk!
-- - -
+
 License
 =======
-The project itsself is licenced under <a href="LICENSE">GPLv3</a>.<br>
+The project itsself is licensed under <a href="LICENSE">GPLv3</a>.<br>
 The used symfony2 framework and 3rd-party bundles use MIT or BSD licence.
-- - - 
+
 Contributors
 ============
 - <a href="https://github.com/dragonchaser">Christian Richter</a>
