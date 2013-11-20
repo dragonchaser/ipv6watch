@@ -23,18 +23,21 @@ class IPV6LogEntry
 	private $id;
 	/**
 	 * @ORM\Column(type="string")
+	 * @ORM\ManyToOne(targetEntity="IPV6Ipv6Entry", inversedBy="IPV6LogEntry")
 	 */
-	private $ipv6Address;
+	private $ipv6AddressId;
 
 	/**
 	 * @ORM\Column(type="string")
+	 * @ORM\ManyToOne(targetEntity="IPV6MacEntry", inversedBy="IPV6LogEntry")
 	 */
-	private $macAddress;
+	private $macAddressId;
 
 	/**
 	 * @ORM\Column(type="string")
+ 	 * @ORM\ManyToOne(targetEntity="IPV6Ipv4Entry", inversedBy="IPV6LogEntry")
 	 */
-	private $ipv4Address;
+	private $ipv4AddressId;
 	/**
 	 * @ORM\Column(type="datetime")
 	 */

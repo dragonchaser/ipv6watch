@@ -11,8 +11,7 @@ class Command extends ContainerAwareCommand
 {
 	protected function configure()
 	{
-		$this
-			->setName('ipv6watch:createuser')
+		$this			->setName('ipv6watch:createuser')
 			->setDescription('create initial user');
 	}
 
