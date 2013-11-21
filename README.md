@@ -4,7 +4,7 @@ ipv6Watch is a small suite, capable of tracking and monitoring the ipv6 leases w
 The suite consists of a webfrontend, written in symfony2 and a client written in python.
 For further details please read the <a href="docs/README.md" target="_blank">documentation</a>.
 
-<b>Note:</b> This is an unstable WIP alpha-release! Most of the code is not working as expected yet, use it at your own risk!
+<b>Note:</b> This is an unstable WIP alpha-release! Most of the code is not working as expected yet, use it at your own risk! The code will be updated on a regular basis, so expect it to be more or less broken until we announce a stable release.
 
 License
 =======
@@ -22,7 +22,7 @@ Quickstart
 ==========
 Clone the project
 -----------------
-Clone the project to a directory of your choice, which can be accessed by your webserver (nginx, apache or alternativly you could use the build in webserver of symfony2 (run `app/console server:run`))
+Clone the project to a directory of your choice, make sure `webfrontend/web` can be accessed by your webserv (nginx, apache will work, alternativly you could use the build in webserver of symfony2 (run `webfrontend/app/console server:run`))
 ```
 git clone https://github.com/ipv6Watch/ipv6watch.git
 ```
@@ -39,6 +39,7 @@ Create initial user
 -------------------
 Run `webfrontend/app/console ipv6watch:createuser`
 
+If you want this User to be able to create other users you have to promote him to `ROLE_SUPER_ADMIN` using `webfrontend/app/console fos_user:promote`
 
 Use the project
 ---------------
