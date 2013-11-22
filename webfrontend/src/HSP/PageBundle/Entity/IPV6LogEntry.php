@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="ipv6_logentry", uniqueConstraints={@ORM\UniqueConstraint(name="macToipv6", columns={"ipv6Address", "macAddress"})})
+ * @ORM\Table(name="ipv6_logentry")
  */
 class IPV6LogEntry
 {
@@ -21,90 +21,99 @@ class IPV6LogEntry
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
 	private $id;
-	/**
-	 * @ORM\Column(type="string")
-	 * @ORM\ManyToOne(targetEntity="IPV6Ipv6Entry", inversedBy="IPV6LogEntry")
-	 */
-	private $ipv6AddressId;
 
 	/**
-	 * @ORM\Column(type="string")
-	 * @ORM\ManyToOne(targetEntity="IPV6MacEntry", inversedBy="IPV6LogEntry")
+	 * @ORM\Column(type="string", length=15)
 	 */
-	private $macAddressId;
+	private $ipv4Address;
 
 	/**
-	 * @ORM\Column(type="string")
- 	 * @ORM\ManyToOne(targetEntity="IPV6Ipv4Entry", inversedBy="IPV6LogEntry")
+	 * @ORM\Column(type="string", length=12)
 	 */
-	private $ipv4AddressId;
+	private $macAddress;
+
+	/**
+	 * @ORM\ManyToMany(targetEntity="IPV6v6Address")
+	 * @ORM\JoinTable(name="ipv6_logenty_to_ipv6address",
+	 *      joinColumns={@ORM\JoinColumn(name="logentry_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="ipv6Address_id", referencedColumnName="ipv6LogEntryId", unique=true)}
+	 *      )
+	 **/
+	private $ipv6Addresses;
 	/**
 	 * @ORM\Column(type="datetime")
 	 */
 	private $date_added;
 
 	/**
-	 * @ORM\Column(type="integer", length=1, options={"default"=0})
+	 * @ORM\ManyToOne(targetEntity="IPV6Router")
+	 * @ORM\JoinColumn(name="IPV6Router", referencedColumnName="ipv6LogEntryId")
 	 */
-	private $hasBeenExported;
+	private $Router;
 
 	/**
-	 * @ORM\Column(type="integer")
-	 * @ORM\ManyToOne(targetEntity="IPV6RouterData", inversedBy="IPV6LogEntry")
-	 */
-	private $RouterData;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="IPV6TimeLog", mappedBy="IPV6LogEntry", cascade={"ALL"}, indexBy="IPV6TimeLog")
-	 */
+	 * @ORM\ManyToMany(targetEntity="IPV6TimeLog")
+	 * @ORM\JoinTable(name="ipv6_logentry_to_timelog",
+	 *      joinColumns={@ORM\JoinColumn(name="logentry_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="timelog_id", referencedColumnName="ipv6LogEntryId", unique=true)}
+	 *      )
+	 **/
 	private $Timelog;
 
-	// commented out since all data is written by the client
-	/*public function setIpv6Address($ipv6Address)
+	/**
+	 * @return mixed
+	 */
+	public function getRouter()
 	{
-			$this->ipv6Address = $ipv6Address;
+		return $this->Router;
 	}
 
-	public function setMacAddress($macAddress)
+	/**
+	 * @return mixed
+	 */
+	public function getTimelog()
 	{
-			$this->macAddress = $macAddress;
+		return $this->Timelog;
 	}
 
-	public function setDateAdded()
-	{
-			$this->date_added = new \DateTime('now');
-	}
-
-	public function setHasBeenExportet($hasBeenExported = 0)
-	{
-		$this->hasBeenExportet = $hasBeenExported;
-
-	public function setIpv4Address($ipv4Address) {
-			$this->ipv4Address = $ipv4Address;
-	}*/
-
-	public function getIpv6Address()
-	{
-		return $this->ipv6Address;
-	}
-
-	public function getMacAddress()
-	{
-		return $this->macAddress;
-	}
-
-	public function getIpv4Address()
-	{
-		return $this->ipv4Address;
-	}
-
+	/**
+	 * @return mixed
+	 */
 	public function getDateAdded()
 	{
 		return $this->date_added;
 	}
 
-	public function getHasBeenExported()
+	/**
+	 * @return mixed
+	 */
+	public function getId()
 	{
-		return $this->hasBeenExported;
+		return $this->id;
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIpv4Address()
+	{
+		return $this->ipv4Address;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIpv6Addresses()
+	{
+		return $this->ipv6Addresses;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getMacAddress()
+	{
+		return $this->macAddress;
+	}
+
 }

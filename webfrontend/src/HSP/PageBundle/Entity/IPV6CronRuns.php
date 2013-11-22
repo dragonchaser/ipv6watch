@@ -11,6 +11,8 @@ namespace HSP\PageBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use HSP\PageBundle\Entity\IPV6CronLog;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="ipv6_cronruns");
@@ -35,7 +37,11 @@ class IPV6CronRuns
 	private $endtime;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="IPV6CronLog", mappedBy="IPV6CronRuns", cascade={"ALL"}, indexBy="IPV6CronLog")
-	 */
-	private $logentry;
+	 * @ORM\ManyToMany(targetEntity="IPV6CronLog")
+	 * @ORM\JoinTable(name="ipv6_cron_runs_to_log",
+	 *      joinColumns={@ORM\JoinColumn(name="cronrun_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="cronlog_id", referencedColumnName="cronRunId", unique=true)}
+	 *      )
+	 **/
+	private $cronLogEntry;
 } 

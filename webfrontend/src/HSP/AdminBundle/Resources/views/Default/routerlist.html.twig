@@ -17,7 +17,7 @@
                 <tr class="{{ cycle(['odd','even'], loop.index0) }}">
                     <td>{{ router.getActive() }}</td>
                     <td>{{ router.getRouterName() }}</td>
-                    <td>{{ router.getIpv4Address() }}<br/>{{ router.getIpv6Address() }}</td>
+                    <td>{{ router.getfqdn() }}</td>
                     <td>
                         <a href="{{ path('hsp_admin_router_delete',{'routerid':router.getid()}) }}">delete</a><br/>
                         <a href="{{ path('hsp_admin_router_edit', {'routerid':router.getid()}) }}">edit</a>

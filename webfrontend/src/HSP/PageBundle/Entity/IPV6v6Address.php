@@ -14,24 +14,33 @@ use Doctrine\Orm\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name=ipv6_mac_entry)
+ * @ORM\Table(name="ipv6_ipv6_entry")
  */
-class IPV6macEntry {
-
+class IPV6v6Address {
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
-	 * @ORM\GeneratedValue(strategy="AUTO")
+ 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
-	private $id;
-
+	private $ipv6LogEntryId;
 	/**
 	 * @ORM\Column(type="string")
 	 */
-	private $macAddress;
+	private $ipv6Address;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="IPV6LogEntry", mappedBy="IPV6macEntry", cascade={"ALL"}, indexBy="IPV6LogEntry")
+	 * @return mixed
 	 */
-	private $logEntry;
+	public function getIpv6Address()
+	{
+		return $this->ipv6Address;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIpv6LogEntryId()
+	{
+		return $this->ipv6LogEntryId;
+	}
 }

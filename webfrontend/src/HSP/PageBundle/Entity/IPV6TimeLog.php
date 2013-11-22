@@ -16,33 +16,44 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class IPV6TimeLog
 {
-    /**
-     * @ORM\id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $lastseen;
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $ipv6LogEntryId;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	private $lastseen;
 
-    /**
-     * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="IPV6LogEntry", inversedBy="IPV6TimeLog")
-     */
-    private $logentry;
+	/**
+	 * @ORM\Column(type="integer", length=1, options={"default"=0})
+	 */
+	private $hasBeenExported;
 
-    // commented out since all data is written by the client
-    /*
-    public function setLastSeen()
-    {
-        $this->lastseen = new \DateTime('now');
-    }
-    */
+	/**
+	 * @return mixed
+	 */
+	public function getHasBeenExported()
+	{
+		return $this->hasBeenExported;
+	}
 
-    function getLastSeen()
-    {
-        return $this->lastseen;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getIpv6LogEntryId()
+	{
+		return $this->ipv6LogEntryId;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getLastseen()
+	{
+		return $this->lastseen;
+	}
+
 }

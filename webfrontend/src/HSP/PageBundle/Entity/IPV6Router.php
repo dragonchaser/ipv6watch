@@ -15,14 +15,14 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ipv6_routerdata")
  */
 
-class IPV6RouterData
+class IPV6Router
 {
 	/**
 	 * @ORM\id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
-	private $id;
+	private $ipv6LogEntryId;
 
 	/**
 	 * @ORM\Column(type="string")
@@ -30,19 +30,9 @@ class IPV6RouterData
 	private $routerName;
 
 	/**
-	 * @ORM\Column(type="string", nullable=true);
-	 */
-	private $ipv6Address;
-
-	/**
-	 * @ORM\Column(type="string", nullable=true);
-	 */
-	private $macAddress;
-
-	/**
 	 * @ORM\Column(type="string");
 	 */
-	private $ipv4Address;
+	private $fqdn;
 
 	/**
 	 * @ORM\Column(type="integer", length=1)
@@ -58,11 +48,6 @@ class IPV6RouterData
 	 * @ORM\Column(type="string")
 	 */
 	private $password;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="IPV6LogEntry", mappedBy="IPV6RouterData", cascade={"ALL"}, indexBy="IPV6LogEntry")
-	 */
-	private $logentry;
 
 	/**
 	 * @return mixed
@@ -171,17 +156,17 @@ class IPV6RouterData
 	/**
 	 * @param mixed $ipv4Address
 	 */
-	public function setIpv4Address($ipv4Address)
+	public function setFqdn($ipv4Address)
 	{
-		$this->ipv4Address = $ipv4Address;
+		$this->fqdn = $ipv4Address;
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getIpv4Address()
+	public function getFqdn()
 	{
-		return $this->ipv4Address;
+		return $this->fqdn;
 	}
 
 	/**

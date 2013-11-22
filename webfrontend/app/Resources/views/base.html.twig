@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset={{ _charset }}"/>
+    <meta name="robots" content="noindex,nofollow" />
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{{ asset('bundles/hsppage/css/pageDesign.css') }}" rel="stylesheet" type="text/css" media="all" />
+    <link href="{{ asset('bundles/hsppage/css/menu.css') }}" rel="stylesheet" type="text/css" media="all" />
+    <link href="{{ asset('bundles/hsppage/css/structure.css') }}" rel="stylesheet" type="text/css" media="all" />
+    <link href="{{ asset('bundles/hsppage/css/body.css') }}" rel="stylesheet" type="text/css" media="all" />
+    <link href="{{ asset('bundles/hspadmin/css/adminstyle.css') }}" rel="stylesheet" type="text/css" media="all"/>
+    {% block head %}{% endblock %}
+</head>
+<body>
+<div id="content">
+    <div class="sf-reset">
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+    </div>
+</div>
+</body>
 </html>

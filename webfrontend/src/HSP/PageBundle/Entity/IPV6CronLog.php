@@ -22,7 +22,7 @@ class IPV6CronLog
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
-	private $id;
+	private $cronRunId;
 
 	/**
 	 * @ORM\Column(type="integer")
@@ -34,10 +34,10 @@ class IPV6CronLog
 	 */
 	private $time;
 	/**
-	 * @ORM\Column(type="integer",options={"default" = NULL}, nullable=true);
-	 * @ORM\ManyToOne(targetEntity="IPV6CronRuns", inversedBy="IPV6CronLog")
+	 * @ORM\ManyToOne(targetEntity="IPV6Router")
+	 * @ORM\JoinColumn(name="IPV6Router", referencedColumnName="ipv6LogEntryId")
 	 */
-	private $routerid;
+	private $Router;
 	/**
 	 * @ORM\Column(type="integer");
 	 */
