@@ -20,7 +20,7 @@ Contributors
 
 Quickstart
 ==========
-Clone the project
+Clone the project 
 -----------------
 Clone the project to a directory of your choice, make sure `webfrontend/web` can be accessed by your webserver (nginx, apache will work, alternativly you could use the build in webserver of symfony2 (run `webfrontend/app/console server:run`)).
 ```
@@ -39,7 +39,7 @@ Create initial user
 -------------------
 Run `webfrontend/app/console ipv6watch:createuser`
 
-If you want this User to be able to create other users you have to promote him to `ROLE_SUPER_ADMIN` using `webfrontend/app/console fos_user:promote`
+If you want this User to be able to create other users you have to promote him to `ROLE_SUPER_ADMIN` using `webfrontend/app/console fos:user:promote`
 
 Use the project
 ---------------

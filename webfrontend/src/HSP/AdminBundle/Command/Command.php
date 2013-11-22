@@ -1,10 +1,12 @@
 <?php
 namespace HSP\AdminBundle\Command;
 
+use HSP\AdminBundle\HSPAdminBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Command extends ContainerAwareCommand
@@ -35,6 +37,7 @@ class Command extends ContainerAwareCommand
 			$newUser->setEmail("admin@yourhost.com");
 			$newUser->addRole("ROLE_ADMIN");
 			$newUser->setEnabled(true);
+			$newUser->setIsNotDeleteable(1);
 			$this->getContainer()->get('doctrine')->getManager()->persist($newUser);
 			$this->getContainer()->get('doctrine')->getManager()->flush();
 		}

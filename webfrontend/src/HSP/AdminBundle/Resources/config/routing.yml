@@ -4,19 +4,19 @@ hsp_admin_link:
 
 hsp_admin_user_handling:
   pattern: /users
-  defaults: {_controller: "HSPAdminBundle:Default:userHandling"}
+  defaults: {_controller: "HSPAdminBundle:User:userHandling"}
   
 hsp_admin_user_edit:
   pattern: /users/{username}/edit
-  defaults: {_controller: "HSPAdminBundle:Default:userEditHandling"}
+  defaults: {_controller: "HSPAdminBundle:User:userEditHandling"}
 
 hsp_admin_user_delete_confirm:
   pattern: /users/{username}/deleteconfirm
-  defaults: {_controller: "HSPAdminBundle:Default:userDeleteConfirm"}  
+  defaults: {_controller: "HSPAdminBundle:User:userDeleteConfirm"}
 
 hsp_admin_user_delete:
   pattern: /users/{username}/delete
-  defaults: {_controller: "HSPAdminBundle:Default:userDelete"}  
+  defaults: {_controller: "HSPAdminBundle:User:userDelete"}
 
 ## stuff added by fos user
 fos_user_security:
@@ -50,23 +50,23 @@ fos_user_security_logout:
 
 hsp_admin_router_handling:
     pattern: /router
-    defaults: {_controller: "HSPAdminBundle:Default:routerHandling"}
+    defaults: {_controller: "HSPAdminBundle:Router:routerHandling"}
 
 hsp_admin_router_add:
   pattern: /router/add
-  defaults: {_controller: "HSPAdminBundle:Default:routerAddEdit"}
+  defaults: {_controller: "HSPAdminBundle:Router:routerAddEdit"}
 
 hsp_admin_router_edit:
   pattern: /router/edit/{routerid}
-  defaults: {_controller: "HSPAdminBundle:Default:routerAddEdit"}
+  defaults: {_controller: "HSPAdminBundle:Router:routerAddEdit"}
 
 hsp_admin_router_delete:
   pattern: /router/delete/{routerid}
-  defaults: {_controller: "HSPAdminBundle:Default:routerDelete"}
+  defaults: {_controller: "HSPAdminBundle:Router:routerDelete"}
 
 hsp_admin_leaselist:
   pattern: /leaselist
-  defaults: {_controller: "HSPAdminBundle:Default:leaseList"}
+  defaults: {_controller: "HSPAdminBundle:Lease:leaseList"}
 
 hsp_admin_lease_exports:
   pattern: /leaselist/exports

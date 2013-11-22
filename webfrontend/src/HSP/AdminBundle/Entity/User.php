@@ -17,17 +17,28 @@ class User extends BaseUser {
 	 */
 	protected $id;
 
+	/**
+	 * @ORM\Column(type="integer", length=1, options={"default"=0})
+	 */
+	private $isNotDeleteable;
+
 	public function __construct() {
 		parent::__construct ();
         $this->roles = array('ROLE_ADMIN');
     }
 
-    /**
-     * @ORM\ManyToMany(targetEntity="HSP\AdminBundle\Entity\Group")
-     * @ORM\JoinTable(name="fos_user_user_group",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
-     * )
-     */
-    //protected $groups;
+	/**
+	 * @return mixed
+	 */
+	public function getIsNotDeleteable()
+	{
+		return $this->isNotDeleteable;
+	}
+
+	public function setIsNotDeleteable($value)
+	{
+		if ($value === 0) $this->isNotDeleteable = 0;
+		else $this->isNotDeleteable = 1;
+	}
+
 }
