@@ -2,18 +2,23 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset={{ _charset }}"/>
-    <meta name="robots" content="noindex,nofollow" />
+    <meta name="robots" content="noindex,nofollow"/>
     <title>{% block title %}{% endblock %}</title>
-    <link href="{{ asset('bundles/hsppage/css/pageDesign.css') }}" rel="stylesheet" type="text/css" media="all" />
-    <link href="{{ asset('bundles/hsppage/css/menu.css') }}" rel="stylesheet" type="text/css" media="all" />
-    <link href="{{ asset('bundles/hsppage/css/structure.css') }}" rel="stylesheet" type="text/css" media="all" />
-    <link href="{{ asset('bundles/hsppage/css/body.css') }}" rel="stylesheet" type="text/css" media="all" />
-    <link href="{{ asset('bundles/hspadmin/css/adminstyle.css') }}" rel="stylesheet" type="text/css" media="all"/>
     {% block head %}{% endblock %}
+    {% stylesheets filter="compass"
+    "@HSPPageBundle/Resources/assets/css/pageDesign.scss"
+    "@HSPPageBundle/Resources/assets/css/menu.scss"
+    "@HSPPageBundle/Resources/assets/css/form.scss"
+    "@HSPPageBundle/Resources/assets/css/body.scss"
+    "@HSPPageBundle/Resources/assets/css/structure.scss"
+    "@HSPAdminBundle/Resources/assets/css/adminstyle.scss" %}
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css" media="all"/>
+    {% endstylesheets %}
 </head>
 <body>
 <div id="content">
     <div class="sf-reset">
+        <div class="logo">ipv6Watch</div>
         {% block body %}{% endblock %}
     </div>
 </div>

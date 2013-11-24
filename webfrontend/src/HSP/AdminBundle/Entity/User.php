@@ -22,6 +22,27 @@ class User extends BaseUser {
 	 */
 	private $isNotDeleteable;
 
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	private $realName;
+
+	/**
+	 * @param mixed $realName
+	 */
+	public function setRealName($realName)
+	{
+		$this->realName = $realName;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getRealName()
+	{
+		return $this->realName;
+	}
+
 	public function __construct() {
 		parent::__construct ();
         $this->roles = array('ROLE_ADMIN');

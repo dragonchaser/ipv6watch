@@ -13,7 +13,8 @@ class Builder extends ContainerAware
 		$menu->addChild('Admin', array('route' => 'hsp_admin_link'));
 
 		$menu->addChild('User', array('route' => 'hsp_admin_user_handling'))
-			->addChild('Add User', array('route' => 'fos_user_registration_register'))->getParent()
+			//->addChild('Add User', array('route' => 'fos_user_registration_register'))->getParent()
+			->addChild('Add User', array('route' => 'hsp_admin_user_add'))->getParent()
 			->addChild('Change Password', array('route' => 'fos_user_change_password'))->getParent()
 			->addChild('Logout', array('route' => 'fos_user_security_logout'));
 
