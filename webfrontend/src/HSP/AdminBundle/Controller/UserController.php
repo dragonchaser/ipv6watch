@@ -16,27 +16,27 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserController extends Controller
 {
-	/**
-	 * generates user list
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
-	public function userHandlingAction()
-	{
-		$userManager = $this->get('fos_user.user_manager');
-		$users = $userManager->findUsers();
-		return $this->render('HSPAdminBundle:Default:userlist.html.twig', array(
-			'name' => "userHandler",
-			'users' => $users
-		));
-	}
+  /**
+   * generates user list
+   * @return \Symfony\Component\HttpFoundation\Response
+   */
+  public function userHandlingAction()
+  {
+    $userManager = $this->get('fos_user.user_manager');
+    $users = $userManager->findUsers();
+    return $this->render('HSPAdminBundle:Default:userlist.html.twig', array(
+      'name' => "userHandler",
+      'users' => $users
+    ));
+  }
 
-	/**
-	 * confirmation handler to delete user
-	 * @param $username
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
-	public function userDeleteConfirmAction($username)
-	{
+  /**
+   * confirmation handler to delete user
+   * @param $username
+   * @return \Symfony\Component\HttpFoundation\Response
+   */
+  public function userDeleteConfirmAction($username)
+  {
     $uM = $this->get('fos_user.user_manager');
     $user = $uM->findUserBy(array('username' => $username));
     if ($user->getIsNotDeleteable() == 1) {
@@ -44,54 +44,54 @@ class UserController extends Controller
       return new RedirectResponse($this->generateUrl('hsp_admin_user_handling'));
     }
     return $this->render('HSPAdminBundle:Default:userdeleteconfirm.html.twig', array(
-			'username' => $username
-		));
-	}
+      'username' => $username
+    ));
+  }
 
-	/**
-	 * delete user
-	 * @param $username
-	 * @return RedirectResponse
-	 */
-	public function userDeleteAction($username)
-	{
-		$userManager = $this->get('fos_user.user_manager');
-		$user = $userManager->findUserBy(array('username' => $username));
-		$userManager->deleteUser($user);
-		$this->get('session')->getFlashBag()->set('notice', $user . ' has been deleted!');
+  /**
+   * delete user
+   * @param $username
+   * @return RedirectResponse
+   */
+  public function userDeleteAction($username)
+  {
+    $userManager = $this->get('fos_user.user_manager');
+    $user = $userManager->findUserBy(array('username' => $username));
+    $userManager->deleteUser($user);
+    $this->get('session')->getFlashBag()->set('notice', $user . ' has been deleted!');
 
     return new RedirectResponse($this->generateUrl('hsp_admin_user_handling'));
   }
 
-	/**
-	 * add or edit user
-	 * @param null $username
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
+  /**
+   * add or edit user
+   * @param null $username
+   * @return \Symfony\Component\HttpFoundation\Response
+   */
   public function userAddEditAction($username = null, Request $request)
   {
-		if ($username != null) {
-			$userManager = $this->get('fos_user.user_manager');
-			if (!($user = $userManager->findUserBy(array('username' => $username))))
-				$username = null;
-		}
-		if ($username == null) {
-			$user = new User();
-		}
-		$form = $this->createFormBuilder($user)
-			->add('username', 'text', array('required' => true, 'label' => 'Username'))
-			->add('realname', 'text', array('required' => true, 'label' => 'Name'))
-			->add('password', 'repeated', array('required' => true,
-				'type' => 'password',
-				'first_options' => array('label' => 'Password'),
-				'second_options' => array('label' => 'Confirm Password')))
+    if ($username != null) {
+      $userManager = $this->get('fos_user.user_manager');
+      if (!($user = $userManager->findUserBy(array('username' => $username))))
+        $username = null;
+    }
+    if ($username == null) {
+      $user = new User();
+    }
+    $form = $this->createFormBuilder($user)
+      ->add('username', 'text', array('required' => true, 'label' => 'Username'))
+      ->add('realname', 'text', array('required' => true, 'label' => 'Name'))
+      ->add('password', 'repeated', array('required' => true,
+        'type' => 'password',
+        'first_options' => array('label' => 'Password'),
+        'second_options' => array('label' => 'Confirm Password')))
       ->add('email', 'repeated', array('required' => true,
         'type' => 'text',
-				'first_options' => array('label' => 'Email'),
-				'second_options' => array('label' => 'Confirm Email')))
+        'first_options' => array('label' => 'Email'),
+        'second_options' => array('label' => 'Confirm Email')))
       ->add('enabled', 'checkbox', array('value' => 1, 'required' => false))
       ->add('save', 'submit')
-			->getForm();
+      ->getForm();
     $form->handleRequest($request);
     if ($form->isValid()) {
       $em = $this->getDoctrine()->getManager();
@@ -105,5 +105,5 @@ class UserController extends Controller
       return new RedirectResponse($this->generateUrl('hsp_admin_user_handling'));
     }
     return $this->render('HSPAdminBundle:Default:useraddedit.html.twig', array('addEditForm' => $form->createView()));
-	}
+  }
 } 

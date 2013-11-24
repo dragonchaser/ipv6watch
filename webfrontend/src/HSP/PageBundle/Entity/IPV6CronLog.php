@@ -17,33 +17,33 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class IPV6CronLog
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\Column(type="integer")
-	 * @ORM\GeneratedValue(strategy="AUTO")
-	 */
-	private $cronRunId;
+  /**
+   * @ORM\Id
+   * @ORM\Column(type="integer")
+   * @ORM\GeneratedValue(strategy="AUTO")
+   */
+  private $cronRunId;
 
-	/**
-	 * @ORM\Column(type="integer")
-	 */
-	private $cronid;
+  /**
+   * @ORM\Column(type="integer")
+   */
+  private $cronid;
 
-	/**
-	 * @ORM\Column(type="datetime");
-	 */
-	private $time;
-	/**
-	 * @ORM\ManyToOne(targetEntity="IPV6Router")
-	 * @ORM\JoinColumn(name="IPV6Router", referencedColumnName="ipv6LogEntryId")
-	 */
-	private $Router;
-	/**
-	 * @ORM\Column(type="integer");
-	 */
-	private $type;
-	/**
-	 * @ORM\Column(type="string");
-	 */
-	private $logentry;
+  /**
+   * @ORM\Column(type="datetime");
+   */
+  private $time;
+  /**
+   * @ORM\ManyToOne(targetEntity="IPV6Router")
+   * @ORM\JoinColumn(name="IPV6Router", referencedColumnName="ipv6LogEntryId")
+   */
+  private $Router;
+  /**
+   * @ORM\Column(type="integer");
+   */
+  private $type;
+  /**
+   * @ORM\Column(type="string");
+   */
+  private $logentry;
 }

@@ -16,44 +16,44 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class IPV6TimeLog
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\Column(type="integer")
-	 * @ORM\GeneratedValue(strategy="AUTO")
-	 */
-	private $ipv6LogEntryId;
-	/**
-	 * @ORM\Column(type="datetime")
-	 */
-	private $lastseen;
+  /**
+   * @ORM\Id
+   * @ORM\Column(type="integer")
+   * @ORM\GeneratedValue(strategy="AUTO")
+   */
+  private $ipv6LogEntryId;
+  /**
+   * @ORM\Column(type="datetime")
+   */
+  private $lastseen;
 
-	/**
-	 * @ORM\Column(type="integer", length=1, options={"default"=0})
-	 */
-	private $hasBeenExported;
+  /**
+   * @ORM\Column(type="integer", length=1, options={"default"=0})
+   */
+  private $hasBeenExported;
 
-	/**
-	 * @return mixed
-	 */
-	public function getHasBeenExported()
-	{
-		return $this->hasBeenExported;
-	}
+  /**
+   * @return mixed
+   */
+  public function getHasBeenExported()
+  {
+    return $this->hasBeenExported;
+  }
 
-	/**
-	 * @return mixed
-	 */
-	public function getIpv6LogEntryId()
-	{
-		return $this->ipv6LogEntryId;
-	}
+  /**
+   * @return mixed
+   */
+  public function getIpv6LogEntryId()
+  {
+    return $this->ipv6LogEntryId;
+  }
 
-	/**
-	 * @return mixed
-	 */
-	public function getLastseen()
-	{
-		return $this->lastseen;
-	}
+  /**
+   * @return mixed
+   */
+  public function getLastseen()
+  {
+    return $this->lastseen;
+  }
 
 }
