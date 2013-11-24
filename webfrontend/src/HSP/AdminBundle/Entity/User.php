@@ -18,8 +18,8 @@ class User extends BaseUser {
 	protected $id;
 
 	/**
-	 * @ORM\Column(type="integer", length=1, options={"default"=0})
-	 */
+   * @ORM\Column(type="integer", length=1, options={"default"=0}, nullable=true)
+   */
 	private $isNotDeleteable;
 
 	/**

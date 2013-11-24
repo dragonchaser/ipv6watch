@@ -1,41 +1,42 @@
 
 .pageHeadline {
-	padding: 5px !important;
+  padding: 5px !important;
 }
 
 div.userListTable {
-	border-radius: 5px;
-	border: solid 1px #dfdfdf;
+  border-radius: 5px;
+  border: solid 1px #dfdfdf;
 }
+
 table.userListTable {
-	width: 100%;
-}
-
-table.userListTable tbody tr th {
-	font-weight: bold;
-	padding: 5px;
-}
-
-table.userListTable tbody tr td {
-	padding: 5px;
-}
-
-table.userListTable .even {
-	background: #ffffff;
-}
-
-table.userListTable .odd {
-	background: #dfdfdf;
+  width: 100%;
+  tbody {
+    tr {
+      th {
+        font-weight: bold;
+        padding: 5px;
+      }
+      td {
+        padding: 5px;
+      }
+    }
+    tr:nth-child(even) {
+      background: #ffffff;
+    }
+    tr:nth-child(odd) {
+      background: #dfdfdf;
+    }
+  }
 }
 
 .logo {
-	font-size: 32px;
-	color: #000000;
-	padding: 20px !important;
-	background: #DFDFDF;
-	border-radius: 5px;
-	margin: 0 0 5px 0 !important;
-	width: 200px;
-	text-align: center;
-	text-shadow: 2px 2px #ffffee;
+  font-size: 32px;
+  color: #000000;
+  padding: 20px !important;
+  background: #DFDFDF;
+  border-radius: 5px;
+  margin: 0 0 5px 0 !important;
+  width: 200px;
+  text-align: center;
+  text-shadow: 2px 2px #ffffee;
 }

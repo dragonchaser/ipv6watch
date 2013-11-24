@@ -10,9 +10,9 @@ hsp_admin_user_add:
   pattern: /users/add
   defaults: {_controller: "HSPAdminBundle:User:userAddEdit"}
 
-#hsp_admin_user_edit:
-#  pattern: /users/{username}/edit
-#  defaults: {_controller: "HSPAdminBundle:User:userEditHandling"}
+hsp_admin_user_edit:
+  pattern: /users/edit/{username}
+  defaults: {_controller: "HSPAdminBundle:User:userAddEdit"}
 
 hsp_admin_user_delete_confirm:
   pattern: /users/{username}/deleteconfirm

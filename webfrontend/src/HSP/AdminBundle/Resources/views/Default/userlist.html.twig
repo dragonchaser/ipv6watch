@@ -5,29 +5,31 @@
 {% block content_header 'Administration - Usermanagment' %}
 {% block content %}
 <div class="userListTable">
-<table class="userListTable">
-  <tr>
-    <th>User</th>
-    <th>Email</th>
-    <th>Roles</th>
-    <th>Actions</th>
-  </tr>
+    <table class="userListTable">
+        <tr>
+            <th>Status</th>
+            <th>User</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
 
-{% for user in users %}
-  <tr class="{{ cycle(['odd','even'], loop.index0) }}">
-    <td>{{ user.username }}</td>
-    <td>{{ user.email }}</td>
-    <td>
-    {% for role in user.roles %}
-			{{ role }}<br/>
-		{% endfor %}
-    </td>
-    <td>
-    	<a href="{{ path('hsp_admin_user_edit',{'username':user.username}) }}">edit roles</a><br/>
-    	<a href="{{ path('hsp_admin_user_delete_confirm',{'username':user.username}) }}">delete</a>
-    </td>
-  </tr>
-{% endfor %}
-</table>
+        {% for user in users %}
+            <tr class="{{ cycle(['odd','even'], loop.index0) }}">
+                <td>{% if user.enabled==1 %}&#10004;{% else %}&#x2300;{% endif %}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% for role in user.roles %}
+                        {{ role }}<br/>
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{{ path('hsp_admin_user_edit',{'username':user.username}) }}">edit</a><br/>
+                    <a href="{{ path('hsp_admin_user_delete_confirm',{'username':user.username}) }}">delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}
