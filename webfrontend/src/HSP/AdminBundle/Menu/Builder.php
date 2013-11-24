@@ -10,7 +10,7 @@ class Builder extends ContainerAware
   {
     $menu = $factory->createItem('root');
     $menu->addChild('Home', array('route' => 'hsp_page_homepage'));
-    $menu->addChild('Admin', array('route' => 'hsp_admin_link'));
+    //$menu->addChild('Admin', array('route' => 'hsp_admin_link'));
 
     $menu->addChild('User', array('route' => 'hsp_admin_user_handling'))
       ->addChild('Add User', array('route' => 'hsp_admin_user_add'))->getParent()
