@@ -34,7 +34,7 @@ class IPV6LogEntry
 
   /**
    * @ORM\ManyToMany(targetEntity="IPV6v6Address")
-   * @ORM\JoinTable(name="ipv6_logenty_to_ipv6address",
+   * @ORM\JoinTable(name="ipv6_logentry_to_ipv6address",
    *      joinColumns={@ORM\JoinColumn(name="logentry_id", referencedColumnName="id")},
    *      inverseJoinColumns={@ORM\JoinColumn(name="ipv6Address_id", referencedColumnName="ipv6LogEntryId", unique=true)}
    *      )
@@ -47,9 +47,9 @@ class IPV6LogEntry
 
   /**
    * @ORM\ManyToOne(targetEntity="IPV6Router")
-   * @ORM\JoinColumn(name="IPV6Router", referencedColumnName="ipv6LogEntryId")
+   * @ORM\JoinColumn(name="IPV6Router", referencedColumnName="id")
    */
-  private $Router;
+  private $RouterId;
 
   /**
    * @ORM\ManyToMany(targetEntity="IPV6TimeLog")

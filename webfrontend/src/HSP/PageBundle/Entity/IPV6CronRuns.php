@@ -35,11 +35,8 @@ class IPV6CronRuns
   private $endtime;
 
   /**
-   * @ORM\ManyToMany(targetEntity="IPV6CronLog")
-   * @ORM\JoinTable(name="ipv6_cron_runs_to_log",
-   *      joinColumns={@ORM\JoinColumn(name="cronrun_id", referencedColumnName="id")},
-   *      inverseJoinColumns={@ORM\JoinColumn(name="cronlog_id", referencedColumnName="cronRunId", unique=true)}
-   *      )
-   **/
-  private $cronLogEntry;
+   * @ORM\ManyToOne(targetEntity="IPV6CronLog")
+   * @ORM\JoinColumn(name="IPV6CronLog", referencedColumnName="id")
+   */
+  private $CronLogId;
 } 

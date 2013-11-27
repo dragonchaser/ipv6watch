@@ -22,7 +22,7 @@ class IPV6Router
    * @ORM\Column(type="integer")
    * @ORM\GeneratedValue(strategy="AUTO")
    */
-  private $ipv6LogEntryId;
+  private $id;
 
   /**
    * @ORM\Column(type="string")

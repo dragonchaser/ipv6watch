@@ -70,7 +70,7 @@ class UserController extends Controller
    */
   public function userAddEditAction($username = null, Request $request)
   {
-    if ($username != null) {
+    if ($username !== null) {
       $userManager = $this->get('fos_user.user_manager');
       if (!($user = $userManager->findUserBy(array('username' => $username))))
         $username = null;
