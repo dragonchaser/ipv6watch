@@ -72,8 +72,11 @@ class UserController extends Controller
   {
     if ($username !== null) {
       $userManager = $this->get('fos_user.user_manager');
-      if (!($user = $userManager->findUserBy(array('username' => $username))))
+      if (!($user = $userManager->findUserBy(array('username' => $username)))) {
+        $this->get('session')->getFlashbag()->add('notice', $username . ' not found!');
         $username = null;
+        return new RedirectResponse($this->generateUrl('hsp_admin_user_handling'));
+      }
     }
     if ($username == null) {
       $user = new User();
@@ -89,12 +92,26 @@ class UserController extends Controller
         'type' => 'text',
         'first_options' => array('label' => 'Email'),
         'second_options' => array('label' => 'Confirm Email')))
+      ->add('roles', 'choice', array(
+        'choices' => array(
+          'ROLE_USER' => 'User',
+          'ROLE_ADMIN' => 'Admin',
+          'ROLE_SUPER_ADMIN' => 'Superadmin',
+        ),
+        'multiple' => true,
+      ))
       ->add('enabled', 'checkbox', array('value' => 1, 'required' => false))
+
+
       ->add('save', 'submit')
       ->getForm();
     $form->handleRequest($request);
     if ($form->isValid()) {
       $em = $this->getDoctrine()->getManager();
+      $formData = $form->getData();
+      $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+      $password = $encoder->encodePassword($formData->getPassword(), $formData->getSalt());
+      $user->setPassword($password);
       $em->persist($user);
       $em->flush();
       if ($username != null) {

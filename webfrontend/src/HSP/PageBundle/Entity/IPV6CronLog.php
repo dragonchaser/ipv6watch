@@ -47,4 +47,12 @@ class IPV6CronLog
    * @ORM\Column(type="string");
    */
   private $logentry;
+
+  private $endtime;
+
+  /**
+   * @ORM\ManyToOne(targetEntity="IPV6CronRuns")
+   * @ORM\JoinColumn(name="IPV6CronRuns", referencedColumnName="id")
+   */
+  private $CronRunId;
 }

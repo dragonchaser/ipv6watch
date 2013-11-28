@@ -35,7 +35,7 @@ class IPV6Router
   private $fqdn;
 
   /**
-   * @ORM\Column(type="integer", length=1)
+   * @ORM\Column(type="boolean")
    */
   private $active;
 

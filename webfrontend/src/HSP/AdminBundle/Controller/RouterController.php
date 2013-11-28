@@ -30,14 +30,22 @@ class RouterController extends Controller
    * create user form to add a router, and create new entry if postdata is given
    * @return \Symfony\Component\HttpFoundation\Response
    */
-  public function routerAddEditAction($routerid = -1, Request $request)
+  public function routerAddEditAction($routerid = null, Request $request)
   {
-    $tmpRouter = new IPV6Router();
+    if ($routerid !== null) {
+      $em = $this->getDoctrine()->getManager()->getRepository('HSPPageBundle:IPV6Router');
+      if (!$tmpRouter = $em->find($routerid)) {
+        $this->get('session')->getFlashbag()->set('notice', 'Router not found!');
+        return new RedirectResponse($this->generateUrl('hsp_admin_router_handling'));
+      }
+    }
+    if ($routerid === null)
+      $tmpRouter = new IPV6Router();
     $form = $this->createFormBuilder($tmpRouter)
       ->add('routername', 'text', array('label' => 'Routername', 'required' => true))
       ->add('fqdn', 'text', array('label' => 'IPV4 address / FQDN', 'required' => true))
       ->add('userName', 'text', array('label' => 'SSH username', 'required' => true))
-      ->add('password', 'password', array('label' => 'SSH password', 'required' => true))
+      ->add('password', 'text', array('label' => 'SSH password', 'required' => true))
       ->add('active', 'checkbox', array('label' => 'Status (checked = active, unchecked = disabled)', 'required' => false, 'value' => 1))
       ->add('save', 'submit')
       ->getForm();

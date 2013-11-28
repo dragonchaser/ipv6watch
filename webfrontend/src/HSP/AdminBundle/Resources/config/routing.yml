@@ -74,4 +74,4 @@ hsp_admin_leaselist:
 
 hsp_admin_lease_exports:
   pattern: /leaselist/exports
-  defaults: {_controller: "HSPAdminBundle:Default:leaseExports"}
+  defaults: {_controller: "HSPAdminBundle:Lease:leaseExports"}

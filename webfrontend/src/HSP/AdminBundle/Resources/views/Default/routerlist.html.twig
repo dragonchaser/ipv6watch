@@ -15,12 +15,12 @@
 
             {% for router in routers %}
                 <tr class="{{ cycle(['odd','even'], loop.index0) }}">
-                    <td>{{ router.getActive() }}</td>
+                    <td>{% if router.getActive()==1 %}&#10004;{% else %}&#x2300;{% endif %}</td>
                     <td>{{ router.getRouterName() }}</td>
                     <td>{{ router.getfqdn() }}</td>
                     <td>
-                        <a href="{{ path('hsp_admin_router_delete',{'routerid':router.getid()}) }}">delete</a><br/>
-                        <a href="{{ path('hsp_admin_router_edit', {'routerid':router.getid()}) }}">edit</a>
+                        <a href="{{ path('hsp_admin_router_edit', {'routerid':router.getid()}) }}">edit</a><br/>
+                        <a href="{{ path('hsp_admin_router_delete',{'routerid':router.getid()}) }}">delete</a>
                     </td>
                 </tr>
             {% endfor %}
