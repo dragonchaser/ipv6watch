@@ -21,7 +21,7 @@ class IPV6TimeLog
    * @ORM\Column(type="integer")
    * @ORM\GeneratedValue(strategy="AUTO")
    */
-  private $ipv6LogEntryId;
+  private $ipv6MacEntryId;
   /**
    * @ORM\Column(type="datetime")
    */
@@ -43,9 +43,9 @@ class IPV6TimeLog
   /**
    * @return mixed
    */
-  public function getIpv6LogEntryId()
+  public function getIpv6MacEntryId()
   {
-    return $this->ipv6LogEntryId;
+    return $this->ipv6MacEntryId;
   }
 
   /**

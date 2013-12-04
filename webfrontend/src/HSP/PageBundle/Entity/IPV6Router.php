@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
+ * This file ist published under GPLv3
+ * Licence: http://www.gnu.org/licenses/gpl-3.0.txt
  * User: chaser
- * Date: 10/25/13
- * Time: 12:24 PM
+ * Date: 11/20/13
+ * Time: 3:22 PM
  */
 
 namespace HSP\PageBundle\Entity;
@@ -35,6 +36,11 @@ class IPV6Router
   private $fqdn;
 
   /**
+   * @ORM\Column(type="integer", options={"default"=22})
+   */
+  private $port;
+
+  /**
    * @ORM\Column(type="boolean")
    */
   private $active;
@@ -48,6 +54,47 @@ class IPV6Router
    * @ORM\Column(type="string")
    */
   private $password;
+
+  /**
+   * @ORM\Column(type="text")
+   */
+  private $sshKey;
+
+  /**
+   * @param mixed $port
+   */
+  public function setPort($port)
+  {
+    $this->port = $port;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getPort()
+    /**
+     * @ORM\ManyToOne(targetEntity="IPV6Router")
+     * @ORM\JoinColumn(name="routerId", referencedColumnName="id")
+     */
+  {
+    return $this->port;
+  }
+
+  /**
+   * @param mixed $sshKey
+   */
+  public function setSshKey($sshKey)
+  {
+    $this->sshKey = $sshKey;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getSshKey()
+  {
+    return $this->sshKey;
+  }
 
   /**
    * @return mixed
@@ -184,6 +231,4 @@ class IPV6Router
   {
     return $this->active;
   }
-
-
 }

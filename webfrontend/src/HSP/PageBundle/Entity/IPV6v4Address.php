@@ -14,9 +14,9 @@ use Doctrine\Orm\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="ipv6_ipv6_entry")
+ * @ORM\Table(name="ipv6_ipv4_entry")
  */
-class IPV6v6Address
+class IPV6v4Address
 {
   /**
    * @ORM\Id
@@ -27,7 +27,7 @@ class IPV6v6Address
   /**
    * @ORM\Column(type="string")
    */
-  private $ipv6ddress;
+  private $ipv4Address;
 
   /**
    * @ORM\ManyToOne(targetEntity="IPV6Router")
@@ -48,6 +48,14 @@ class IPV6v6Address
   /**
    * @return mixed
    */
+  public function getIpv6Address()
+  {
+    return $this->ipv4Address;
+  }
+
+  /**
+   * @return mixed
+   */
   public function getIpv6MacEntryId()
   {
     return $this->ipv6MacEntryId;
@@ -64,9 +72,17 @@ class IPV6v6Address
   /**
    * @return mixed
    */
-  public function getIpv6Address()
+  public function getInterface()
   {
-    return $this->ipv6Address;
+    return $this->interface;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getIpv4Address()
+  {
+    return $this->ipv4Address;
   }
 
   /**
