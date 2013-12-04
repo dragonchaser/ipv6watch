@@ -27,7 +27,7 @@ class IPV6v6Address
   /**
    * @ORM\Column(type="string")
    */
-  private $ipv6ddress;
+  private $ipv6Address;
 
   /**
    * @ORM\ManyToOne(targetEntity="IPV6Router")
@@ -48,6 +48,14 @@ class IPV6v6Address
   /**
    * @return mixed
    */
+  public function getIpv6Address()
+  {
+    return $this->ipv6Address;
+  }
+
+  /**
+   * @return mixed
+   */
   public function getIpv6MacEntryId()
   {
     return $this->ipv6MacEntryId;
@@ -64,9 +72,9 @@ class IPV6v6Address
   /**
    * @return mixed
    */
-  public function getIpv6Address()
+  public function getInterface()
   {
-    return $this->ipv6Address;
+    return $this->interface;
   }
 
   /**

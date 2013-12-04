@@ -72,10 +72,6 @@ class IPV6Router
    * @return mixed
    */
   public function getPort()
-    /**
-     * @ORM\ManyToOne(targetEntity="IPV6Router")
-     * @ORM\JoinColumn(name="routerId", referencedColumnName="id")
-     */
   {
     return $this->port;
   }
