@@ -28,19 +28,26 @@ class IPV6MacEntry
   private $macAddress;
 
   /**
-   * @ORM\ManyToMany(targetEntity="IPV6v6Address")
-   * @ORM\JoinTable(name="ipv6_logentry_to_ipv6address",
-   *      joinColumns={@ORM\JoinColumn(name="logentryId", referencedColumnName="id")},
-   *      inverseJoinColumns={@ORM\JoinColumn(name="ipv6AddressId", referencedColumnName="ipv6MacEntryId", unique=true)}
-   *      )
-   **/
-  private $ipv6Addresses;
+   * @return mixed
+   */
+  public function getMacAddress()
+  {
+    return $this->macAddress;
+  }
 
   /**
-   * @ORM\ManyToMany(targetEntity="IPV6v4Address")
-   * @ORM\JoinTable(name="ipv6_logentry_to_ipv4address",
+   * @return mixed
+   */
+  public function getRouterId()
+  {
+    return $this->RouterId;
+  }
+
+  /**
+   * @ORM\ManyToMany(targetEntity="IPV6IpAddress")
+   * @ORM\JoinTable(name="ipv6_logentry_to_ipaddress",
    *      joinColumns={@ORM\JoinColumn(name="logentryId", referencedColumnName="id")},
-   *      inverseJoinColumns={@ORM\JoinColumn(name="ipv4AddressId", referencedColumnName="ipv6MacEntryId", unique=true)}
+   *      inverseJoinColumns={@ORM\JoinColumn(name="ipAddressId", referencedColumnName="ipv6MacEntryId", unique=true)}
    *      )
    **/
   private $ipv4Addresses;

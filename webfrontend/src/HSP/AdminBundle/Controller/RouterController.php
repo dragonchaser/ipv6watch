@@ -43,9 +43,11 @@ class RouterController extends Controller
       $tmpRouter = new IPV6Router();
     $form = $this->createFormBuilder($tmpRouter)
       ->add('routername', 'text', array('label' => 'Routername', 'required' => true))
-      ->add('fqdn', 'text', array('label' => 'IPV4 address / FQDN', 'required' => true))
-      ->add('userName', 'text', array('label' => 'SSH username', 'required' => true))
-      ->add('password', 'text', array('label' => 'SSH password', 'required' => true))
+      ->add('fqdn', 'text', array('label' => 'FQDN/IP', 'required' => true))
+      ->add('port', 'number', array('label' => 'Port', 'required' => false))
+      ->add('userName', 'text', array('label' => 'SSH username', 'required' => false))
+      ->add('password', 'text', array('label' => 'SSH password', 'required' => false))
+      ->add('sshKey', 'textarea', array('label' => 'SSH Key', 'required' => false))
       ->add('active', 'checkbox', array('label' => 'Status (checked = active, unchecked = disabled)', 'required' => false, 'value' => 1))
       ->add('save', 'submit')
       ->getForm();

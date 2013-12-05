@@ -36,6 +36,14 @@ class IPV6Router
   private $fqdn;
 
   /**
+   * @param mixed $id
+   */
+  public function setId($id)
+  {
+    $this->id = $id;
+  }
+
+  /**
    * @ORM\Column(type="integer", options={"default"=22})
    */
   private $port;
@@ -46,17 +54,17 @@ class IPV6Router
   private $active;
 
   /**
-   * @ORM\Column(type="string")
+   * @ORM\Column(type="string", nullable=true)
    */
   private $username;
 
   /**
-   * @ORM\Column(type="string")
+   * @ORM\Column(type="string", nullable=true)
    */
   private $password;
 
   /**
-   * @ORM\Column(type="text")
+   * @ORM\Column(type="text", nullable=true)
    */
   private $sshKey;
 
