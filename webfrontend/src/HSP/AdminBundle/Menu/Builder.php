@@ -11,7 +11,7 @@ class Builder extends ContainerAware
     $menu = $factory->createItem('root');
     $menu->addChild('Home', array('route' => 'hsp_page_homepage'));
 
-    $menu->addChild('Config')
+    $menu->addChild('Config', array('route' => 'hsp_admin_edit_config'))
       // generate user submenu
       ->addChild('User', array('route' => 'hsp_admin_user_handling'))
       ->addChild('Add User', array('route' => 'hsp_admin_user_add'))
