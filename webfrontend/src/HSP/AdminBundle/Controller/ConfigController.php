@@ -28,6 +28,7 @@ class ConfigController extends Controller
       ->add('htaccessPassword', 'text', array('label' => '.htaccess Password', 'required' => false))
       ->add('enableExports', 'checkbox', array('label' => 'Status (checked = active, unchecked = disabled)', 'required' => false, 'value' => 1))
       ->add('logPruningTime', 'number', array('label' => 'Log pruning time', 'required' => false))
+      ->add('maxExportItems', 'number', array('label' => 'Max. export items', 'required' => false))
       ->add('save', 'submit')->getForm();
     $form->handleRequest($request);
     if ($form->isValid()) {

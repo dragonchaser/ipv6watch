@@ -44,6 +44,11 @@ class IPV6Config
   private $logPruningTime;
 
   /**
+   * @ORM\Column(type="integer", nullable=true)
+   */
+  private $maxExportItems;
+
+  /**
    * @param mixed $configInstanceName
    */
   public function setConfigInstanceName($configInstanceName)
@@ -121,6 +126,22 @@ class IPV6Config
   public function getEnableExports()
   {
     return $this->enableExports;
+  }
+
+  /**
+   * @param mixed $maxExportItems
+   */
+  public function setMaxExportItems($maxExportItems)
+  {
+    $this->maxExportItems = $maxExportItems;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getMaxExportItems()
+  {
+    return $this->maxExportItems;
   }
 
 } 
