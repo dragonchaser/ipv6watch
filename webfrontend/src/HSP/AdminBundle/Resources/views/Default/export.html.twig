@@ -5,7 +5,12 @@
 {% block content_header 'Administration - Export' %}
 {% block content %}
     <center>
-        To start export please copy the link to your curl script or download it (save target as)<br/>
-        <a href="{{ csvexportlink }}" tabindex="_blank">{{ csvexportlink }}</a>
+        {% if enabled == false %}
+            Export has been disabled!<br/>
+            <a href="{{ path('hsp_admin_edit_config') }}">Goto config to enable!</a>
+        {% else %}
+            To start export please copy the link to your curl script or download it (save target as)<br/>
+            <a href="{{ csvexportlink }}" tabindex="_blank">{{ csvexportlink }}</a>
+        {% endif %}
     </center>
 {% endblock %}

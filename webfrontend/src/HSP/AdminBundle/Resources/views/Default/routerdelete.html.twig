@@ -1,0 +1,12 @@
+{% extends "HSPPageBundle::layout.html.twig" %}
+
+{% block title "Administration - Delete Router" %}
+
+{% block content_header 'Administration - Delete Router' %}
+{% block content %}
+    <center>
+        Do you really want to delete the router {{ name }}?<br>
+        <a href="{{ path('hsp_admin_router_delete_confirm', {'routerid':id}) }}">Yes</a>
+        <a href="{{ path('hsp_admin_router_handling') }}">No</a>
+    </center>
+{% endblock %}

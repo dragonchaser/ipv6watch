@@ -26,22 +26,22 @@ hsp_admin_user_delete:
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
     prefix: /
-    
-fos_user_profile:
-    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
-    prefix: /profile
 
-fos_user_register:
-    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
-    prefix: /register
+#fos_user_profile:
+#    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+#    prefix: /profile
+
+#fos_user_register:
+#    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+#    prefix: /register
 
 #fos_user_resetting:
 #    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
 #    prefix: /resetting
 
-fos_user_change_password:
-    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
-    prefix: /profile
+#fos_user_change_password:
+ #   resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+ #   prefix: /profile
 
 #fos_user_group:
 #    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
@@ -67,6 +67,10 @@ hsp_admin_router_edit:
 hsp_admin_router_delete:
   pattern: /router/delete/{routerid}
   defaults: {_controller: "HSPAdminBundle:Router:routerDelete"}
+
+hsp_admin_router_delete_confirm:
+  pattern: /router/delete/{routerid}/confirm
+  defaults: {_controller: "HSPAdminBundle:Router:routerDeleteConfirm"}
 
 hsp_admin_leaselist:
   pattern: /leaselist

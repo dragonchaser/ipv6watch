@@ -63,14 +63,29 @@ class RouterController extends Controller
   }
 
   /**
-   * delete router from list
-   * TODO: implement!
+   * delete router from list confirmation
    * @param $routerid
-   * @param Request $request
    * @return \Symfony\Component\HttpFoundation\Response
    */
-  public function routerDeleteAction($routerid, Request $request)
+  public function routerDeleteAction($routerid)
   {
-    return $this->render('HSPAdminBundle:Default:index.html.twig', array('name' => $routerid));
+    $router = $this->getDoctrine()->getManager()->getRepository('HSPPageBundle:IPV6Router')->find($routerid);
+    return $this->render('HSPAdminBundle:Default:routerdelete.html.twig', array('name' => $router->getRouterName(), 'id' => $routerid));
   }
-} 
+
+  /**
+   * delete router from list
+   * @param $routerid
+   * @return RedirectResponse
+   */
+  public function routerDeleteConfirmAction($routerid)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $routerName = $this->getDoctrine()->getManager()->getRepository('HSPPageBundle:IPV6Router')->find($routerid)->getRouterName();
+    $router = $this->getDoctrine()->getManager()->getRepository('HSPPageBundle:IPV6Router')->find($routerid);
+    $em->remove($router);
+    $em->flush();
+    $this->get('session')->getFlashBag()->set('notice', 'deleted router ' . $routerName);
+    return new RedirectResponse($this->generateUrl('hsp_admin_router_handling'));
+  }
+}

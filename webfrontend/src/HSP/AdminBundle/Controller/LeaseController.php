@@ -70,9 +70,13 @@ class LeaseController extends Controller
    */
   public function leaseExportsAction()
   {
+    $configManager = $this->get('hsp_admin.config')->getConfig();
     return $this->render('HSPAdminBundle:Default:export.html.twig',
-      array('csvexportlink' => $this->generateUrl('hsp_admin_lease_export_csv',
-          array('securityToken' => $this->get('hsp_admin.config')->getConfig()->getSecurityToken()), UrlGenerator::ABSOLUTE_URL))
+      array('enabled' => ($configManager->getEnableExports() == false ? false : true),
+        'csvexportlink' => $this->generateUrl('hsp_admin_lease_export_csv',
+            array(
+              'securityToken' => $configManager->getSecurityToken()), UrlGenerator::ABSOLUTE_URL)
+      )
     );
   }
 
@@ -83,9 +87,10 @@ class LeaseController extends Controller
    */
   public function leaseExportsCSVAction($securityToken)
   {
-    $checkToken = $this->get('hsp_admin.config')->getConfig()->getSecurityToken();
-    var_dump($checkToken);
-    if ($this->get('hsp_admin.config')->getConfig()->getSecurityToken() != $securityToken) {
+    $configManager = $this->get('hsp_admin.config')->getConfig();
+    if ($configManager->getEnableExports() == false ||
+      $configManager->getSecurityToken() !== $securityToken
+    ) {
       return new RedirectResponse($this->generateUrl('hsp_admin_link'));
     }
     return $this->render('HSPAdminBundle:Default:export.csv.twig', array('name' => 'CSV'));
