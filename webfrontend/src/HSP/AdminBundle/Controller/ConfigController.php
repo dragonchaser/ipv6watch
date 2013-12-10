@@ -24,8 +24,7 @@ class ConfigController extends Controller
       $config->setConfigInstanceName('master');
     }
     $form = $this->createFormBuilder($config)
-      ->add('htaccessUsername', 'text', array('label' => 'Export .htaccess Username', 'required' => false))
-      ->add('htaccessPassword', 'text', array('label' => 'Export.htaccess Password', 'required' => false))
+      ->add('securityToken', 'text', array('label' => 'Export security token', 'required' => false))
       ->add('maxExportItems', 'number', array('label' => 'Export max. items', 'required' => false))
       ->add('enableExports', 'checkbox', array('label' => 'Export enabled', 'required' => false, 'value' => 1))
       ->add('logPruningTime', 'number', array('label' => 'Log pruning time', 'required' => false))
@@ -46,7 +45,7 @@ class ConfigController extends Controller
   public function getConfig($configInstanceName = 'master')
   {
     $em = $this->getDoctrine()->getManager()->getRepository('HSPAdminBundle:IPV6Config');
-    if (($data = $em->findBy(array('configInstanceName' => 'master')) === true)) {
+    if (true == ($data = $em->findOneBy(array('configInstanceName' => 'master')))) {
       return $data;
     } else {
       throw $this->createNotFoundException('Config not found! Please edit first!');

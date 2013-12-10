@@ -1,7 +1,5 @@
-parameters:
-#    hsp_admin.example.class: HSP\AdminBundle\Example
-
 services:
-#    hsp_admin.example:
-#        class: %hsp_admin.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    hsp_admin.config:
+      class: HSP\AdminBundle\Controller\ConfigController
+      calls:
+        - [ setContainer, [ @service_container ] ]

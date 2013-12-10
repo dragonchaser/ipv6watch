@@ -76,6 +76,10 @@ hsp_admin_lease_exports:
   pattern: /leaselist/exports
   defaults: {_controller: "HSPAdminBundle:Lease:leaseExports"}
 
+hsp_admin_lease_export_csv:
+  pattern: /leaselist/exports/csv/{securityToken}
+  defaults: {_controller: "HSPAdminBundle:Lease:leaseExportsCSV"}
+
 hsp_admin_edit_config:
   pattern: /config/
   defaults: {_controller: "HSPAdminBundle:Config:editconfig"}

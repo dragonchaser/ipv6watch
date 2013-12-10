@@ -26,12 +26,7 @@ class IPV6Config
   /**
    * @ORM\Column(type="string", nullable=true)
    */
-  private $htaccessUserName;
-
-  /**
-   * @ORM\Column(type="string", nullable=true)
-   */
-  private $htaccessPassword;
+  private $securityToken;
 
   /**
    * @ORM\Column(type="boolean", nullable=true)
@@ -65,35 +60,19 @@ class IPV6Config
   }
 
   /**
-   * @param mixed $htaccessPassword
+   * @param mixed $securityToken
    */
-  public function setHtaccessPassword($htaccessPassword)
+  public function setSecurityToken($securityToken)
   {
-    $this->htaccessPassword = $htaccessPassword;
+    $this->securityToken = $securityToken;
   }
 
   /**
    * @return mixed
    */
-  public function getHtaccessPassword()
+  public function getSecurityToken()
   {
-    return $this->htaccessPassword;
-  }
-
-  /**
-   * @param mixed $htaccessUserName
-   */
-  public function setHtaccessUserName($htaccessUserName)
-  {
-    $this->htaccessUserName = $htaccessUserName;
-  }
-
-  /**
-   * @return mixed
-   */
-  public function getHtaccessUserName()
-  {
-    return $this->htaccessUserName;
+    return $this->securityToken;
   }
 
   /**

@@ -10,7 +10,9 @@
 namespace HSP\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class LeaseController extends Controller
 {
@@ -63,13 +65,29 @@ class LeaseController extends Controller
   }
 
   /**
-   * lists all existing export files in export folder and allows to download / delete then
-   * TODO: implement!
-   * @param Request $request
+   * link to export
    * @return \Symfony\Component\HttpFoundation\Response
    */
-  public function leaseExportsAction(Request $request)
+  public function leaseExportsAction()
   {
-    return $this->render('HSPAdminBundle:Default:index.html.twig', array('name' => 'leaseexport'));
+    return $this->render('HSPAdminBundle:Default:export.html.twig',
+      array('csvexportlink' => $this->generateUrl('hsp_admin_lease_export_csv',
+          array('securityToken' => $this->get('hsp_admin.config')->getConfig()->getSecurityToken()), UrlGenerator::ABSOLUTE_URL))
+    );
+  }
+
+  /**
+   * render the number of exportitems as csv file
+   * @param $securityToken
+   * @return RedirectResponse|\Symfony\Component\HttpFoundation\Response
+   */
+  public function leaseExportsCSVAction($securityToken)
+  {
+    $checkToken = $this->get('hsp_admin.config')->getConfig()->getSecurityToken();
+    var_dump($checkToken);
+    if ($this->get('hsp_admin.config')->getConfig()->getSecurityToken() != $securityToken) {
+      return new RedirectResponse($this->generateUrl('hsp_admin_link'));
+    }
+    return $this->render('HSPAdminBundle:Default:export.csv.twig', array('name' => 'CSV'));
   }
 } 
