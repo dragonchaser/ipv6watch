@@ -87,3 +87,7 @@ hsp_admin_lease_export_csv:
 hsp_admin_edit_config:
   pattern: /config/
   defaults: {_controller: "HSPAdminBundle:Config:editconfig"}
+
+hsp_admin_log:
+  pattern: /log
+  defaults: {_controller: "HSPAdminBundle:Log:logViewer"}

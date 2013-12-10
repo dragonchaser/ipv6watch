@@ -25,6 +25,8 @@ class Builder extends ContainerAware
 
       $menu->addChild('Leases', array('route' => 'hsp_admin_leaselist'))
         ->addChild('Export', array('route' => 'hsp_admin_lease_exports'));
+
+      $menu->addChild('Log', array('route' => 'hsp_admin_log'));
     }
     return $menu;
   }

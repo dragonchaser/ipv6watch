@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
+// TODO: implement filters & paginate(?)
+
 class LeaseController extends Controller
 {
 
