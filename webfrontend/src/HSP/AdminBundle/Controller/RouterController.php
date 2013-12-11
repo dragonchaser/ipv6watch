@@ -53,7 +53,7 @@ class RouterController extends Controller
       ->getForm();
     $form->handleRequest($request);
     if ($form->isValid()) {
-      $this->get('session')->getFlashBag()->set('notice', 'added router ' . $tmpRouter->getRouterName());
+      $this->get('session')->getFlashBag()->set('notice', 'saved routersettings ' . $tmpRouter->getRouterName());
       $em = $this->getDoctrine()->getManager();
       $em->persist($tmpRouter);
       $em->flush();

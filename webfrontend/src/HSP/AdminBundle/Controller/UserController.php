@@ -107,6 +107,7 @@ class UserController extends Controller
       ->getForm();
     $form->handleRequest($request);
     if ($form->isValid()) {
+      $this->get('session')->getFlashBag('notice', $username . ' has been saved.');
       $em = $this->getDoctrine()->getManager();
       $formData = $form->getData();
       $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
@@ -114,11 +115,6 @@ class UserController extends Controller
       $user->setPassword($password);
       $em->persist($user);
       $em->flush();
-      if ($username != null) {
-        $this->get('session')->getFlashBag('notice', $username . ' has been updated.');
-      } else {
-        $this->get('session')->getFlashBag('notice', $username . ' has been created.');
-      }
       return new RedirectResponse($this->generateUrl('hsp_admin_user_handling'));
     }
     return $this->render('HSPAdminBundle:Default:useraddedit.html.twig', array('addEditForm' => $form->createView()));

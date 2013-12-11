@@ -31,7 +31,7 @@ class ConfigController extends Controller
       ->add('save', 'submit')->getForm();
     $form->handleRequest($request);
     if ($form->isValid()) {
-      $this->get('session')->getFlashBag()->set('notice', 'wrote config');
+      $this->get('session')->getFlashBag()->set('notice', 'Config has been stored');
       $em = $this->getDoctrine()->getManager();
       $em->persist($config);
       $em->flush();

@@ -40,3 +40,12 @@ table.userListTable {
   text-align: center;
   text-shadow: 2px 2px #ffffee;
 }
+
+div.flash-message {
+  border: solid 1px #cccccc;
+  border-radius: 5px;
+  margin-top: 10px !important;
+  margin-bottom: 5px !important;
+  padding: 5px !important;
+  font-weight: bold;
+}
