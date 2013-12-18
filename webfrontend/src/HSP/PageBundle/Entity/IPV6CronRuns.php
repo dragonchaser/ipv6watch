@@ -33,4 +33,60 @@ class IPV6CronRuns
    * @ORM\Column(type="datetime",options={"default" = NULL}, nullable=true)
    */
   private $endtime;
-} 
+
+  /**
+   * Get id
+   *
+   * @return integer
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  /**
+   * Set starttime
+   *
+   * @param \DateTime $starttime
+   * @return IPV6CronRuns
+   */
+  public function setStarttime($starttime)
+  {
+    $this->starttime = $starttime;
+
+    return $this;
+  }
+
+  /**
+   * Get starttime
+   *
+   * @return \DateTime
+   */
+  public function getStarttime()
+  {
+    return $this->starttime;
+  }
+
+  /**
+   * Set endtime
+   *
+   * @param \DateTime $endtime
+   * @return IPV6CronRuns
+   */
+  public function setEndtime($endtime)
+  {
+    $this->endtime = $endtime;
+
+    return $this;
+  }
+
+  /**
+   * Get endtime
+   *
+   * @return \DateTime
+   */
+  public function getEndtime()
+  {
+    return $this->endtime;
+  }
+}

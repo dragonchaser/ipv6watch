@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="ipv6_routerdata")
+ * @ORM\Table(name="ipv6_router")
  */
 
 class IPV6Router

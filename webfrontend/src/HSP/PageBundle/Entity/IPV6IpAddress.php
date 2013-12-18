@@ -9,12 +9,11 @@
 
 namespace HSP\PageBundle\Entity;
 
-use Doctrine\Orm\Mapping as ORM;
-
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="ipv6_ip_entry")
+ * @ORM\Table(name="ipv6_ipaddress")
  */
 class IPV6IpAddress
 {
@@ -23,96 +22,21 @@ class IPV6IpAddress
    * @ORM\Column(type="integer")
    * @ORM\GeneratedValue(strategy="AUTO")
    */
-  private $ipv6MacEntryId;
+  private $id;
   /**
-   * @ORM\Column(type="string")
+   * @ORM\Column(type="string", nullable=true)
    */
-  private $ipAddress;
+  private $ipv4Address;
 
   /**
-   * @ORM\Column(type="string", length=2)
+   * @ORM\Column(type="string", nullable=true)
    */
-  private $addressType;
-
-  /**
-   * @return mixed
-   */
-  public function getVlanName()
-  {
-    return $this->vlanName;
-  }
-
-  /**
-   * @return mixed
-   */
-  public function getRouterId()
-  {
-    return $this->RouterId;
-  }
-
-  /**
-   * @return mixed
-   */
-  public function getAdded()
-  {
-    return $this->added;
-  }
-
-  /**
-   * @return mixed
-   */
-  public function getAddressType()
-  {
-    return $this->addressType;
-  }
-
-  /**
-   * @return mixed
-   */
-  public function getInterface()
-  {
-    return $this->interface;
-  }
-
-  /**
-   * @return mixed
-   */
-  public function getIpAddress()
-  {
-    return $this->ipAddress;
-  }
-
-  /**
-   * @return mixed
-   */
-  public function getIpv6MacEntryId()
-  {
-    return $this->ipv6MacEntryId;
-  }
-
-  /**
-   * @return mixed
-   */
-  public function getLastseen()
-  {
-    return $this->lastseen;
-  }
-
-  /**
-   * @ORM\ManyToOne(targetEntity="IPV6Router")
-   * @ORM\JoinColumn(name="routerId", referencedColumnName="id")
-   */
-  private $RouterId;
+  private $ipv6Address;
 
   /**
    * @ORM\Column(type="string")
    */
-  private $vlanName;
-
-  /**
-   * @ORM\Column(type="string")
-   */
-  private $interface;
+  private $macAddress;
 
   /**
    * @ORM\Column(type="datetime")
@@ -123,4 +47,130 @@ class IPV6IpAddress
    * @ORM\Column(type="datetime")
    */
   private $lastseen;
+
+
+  /**
+   * Get id
+   *
+   * @return integer
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  /**
+   * Set ipv4Address
+   *
+   * @param string $ipv4Address
+   * @return IPV6IpAddress
+   */
+  public function setIpv4Address($ipv4Address)
+  {
+    $this->ipv4Address = $ipv4Address;
+
+    return $this;
+  }
+
+  /**
+   * Get ipv4Address
+   *
+   * @return string
+   */
+  public function getIpv4Address()
+  {
+    return $this->ipv4Address;
+  }
+
+  /**
+   * Set ipv6Address
+   *
+   * @param string $ipv6Address
+   * @return IPV6IpAddress
+   */
+  public function setIpv6Address($ipv6Address)
+  {
+    $this->ipv6Address = $ipv6Address;
+
+    return $this;
+  }
+
+  /**
+   * Get ipv6Address
+   *
+   * @return string
+   */
+  public function getIpv6Address()
+  {
+    return $this->ipv6Address;
+  }
+
+  /**
+   * Set macAddress
+   *
+   * @param string $macAddress
+   * @return IPV6IpAddress
+   */
+  public function setMacAddress($macAddress)
+  {
+    $this->macAddress = $macAddress;
+
+    return $this;
+  }
+
+  /**
+   * Get macAddress
+   *
+   * @return string
+   */
+  public function getMacAddress()
+  {
+    return $this->macAddress;
+  }
+
+  /**
+   * Set added
+   *
+   * @param \DateTime $added
+   * @return IPV6IpAddress
+   */
+  public function setAdded($added)
+  {
+    $this->added = $added;
+
+    return $this;
+  }
+
+  /**
+   * Get added
+   *
+   * @return \DateTime
+   */
+  public function getAdded()
+  {
+    return $this->added;
+  }
+
+  /**
+   * Set lastseen
+   *
+   * @param \DateTime $lastseen
+   * @return IPV6IpAddress
+   */
+  public function setLastseen($lastseen)
+  {
+    $this->lastseen = $lastseen;
+
+    return $this;
+  }
+
+  /**
+   * Get lastseen
+   *
+   * @return \DateTime
+   */
+  public function getLastseen()
+  {
+    return $this->lastseen;
+  }
 }

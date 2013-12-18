@@ -43,7 +43,7 @@ class LeaseController extends Controller
     if (!isset($formData['filterBy'])) $formData['filterBy'] = 'any';
     if (!isset($formData['filter'])) $formData['filter'] = ''; else $formData['filter'] = trim($formData['filter']);
     $this->get('session')->getFlashBag()->set('notice', $formData['filterBy']);
-    $repository = $this->getDoctrine()->getRepository('HSPPageBundle:IPV6MacEntry');
+    $repository = $this->getDoctrine()->getRepository('HSPPageBundle:IPV6IpAddress');
     if (empty($formData['filter']))
       $entries = $repository->findAll();
     else
