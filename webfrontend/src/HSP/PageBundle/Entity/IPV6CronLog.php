@@ -25,17 +25,18 @@ class IPV6CronLog
   private $id;
 
   /**
-   * @ORM\Column(type="integer")
+   * @ORM\ManyToOne(targetEntity="IPV6CronRuns")
+   * @ORM\JoinColumn(name="IPV6CronRuns", referencedColumnName="id")
    */
   private $cronid;
 
   /**
-   * @ORM\Column(type="datetime");
+   * @ORM\Column(type="datetime")
    */
   private $time;
   /**
    * @ORM\ManyToOne(targetEntity="IPV6Router")
-   * @ORM\JoinColumn(name="IPV6Router", referencedColumnName="id")
+   * @ORM\JoinColumn(name="router_id", referencedColumnName="id")
    */
   private $RouterId;
   /**
@@ -47,13 +48,10 @@ class IPV6CronLog
    */
   private $logentry;
 
-  private $endtime;
-
   /**
-   * @ORM\ManyToOne(targetEntity="IPV6CronRuns")
-   * @ORM\JoinColumn(name="IPV6CronRuns", referencedColumnName="id")
+   * @ORM\Column(type="datetime")
    */
-  private $CronRunId;
+  private $endtime;
 
   /**
    * Get id
