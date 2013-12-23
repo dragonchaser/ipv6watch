@@ -31,6 +31,8 @@ Configure the database
 Setup the database of your choice (we support only postgres and mysql).
 Edit `webfrontend/app/config/parameters.yml` and `client/pydemo/config.cfg` to suit your needs.
 
+<b>HINT:</b> If you are using mysql with phpmyadmin, <b>UNDER NO CIRCUMSTANCES</b> use phpmyadmin to create a database export, it will wreck the whole database structure. We are currently looking into that issue but at this moment we assume this is a problem of phpmyadmin.
+
 Setup database schema
 ---------------------
 Run `webfrontend/app/console doctrine:schema:create`.
