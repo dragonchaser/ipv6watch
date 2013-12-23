@@ -1,36 +1,51 @@
 import datetime
 import re
-import paramiko
 import threading
 import ConfigParser
 from time import time, strftime
-from sqlalchemy import create_engine, select, sql, Table, exc, func, MetaData
 import sys
 
+import paramiko
+from sqlalchemy import orm
+from sqlalchemy.exc import OperationalError
+from sqlalchemy import *
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, relationship
 
-def writelog(entry, etype, routerid=0):
-    if routerid > 0:
-        tbl_cronlog.insert().values(
-            {'cronid': cronrunid, 'time': func.now(), 'routerid': routerid, 'type': etype, 'logentry': entry}).execute()
-    else:
-        tbl_cronlog.insert().values(
-            {'cronid': cronrunid, 'time': func.now(), 'type': etype, 'logentry': entry}).execute()
+Base = declarative_base()
 
 
-class Router(threading.Thread):
-    def __init__(self, id, name, ip, username, password):
+class Router(Base, threading.Thread):
+    __tablename__ = 'ipv6_router'
+    id = Column(Integer, primary_key=True)
+    routerName = Column(String)
+    fqdn = Column(String)
+    port = Column(Integer)
+    active = Column(Integer)
+    username = Column(String)
+    password = Column(String)
+    sshKey = Column(UnicodeText)
+    neighbors = []
+    arp = []
+
+    @orm.reconstructor
+    def init_on_load(self):
         threading.Thread.__init__(self)
-        self.id = id
-        self.name = name
-        self.ip = ip
+
+    def __init__(self, routerName, fqdn, port, username, password, sshKey):
+        threading.Thread.__init__(self)
+        self.routerName = routerName
+        self.fqdn = fqdn
+        self.port = port
         self.username = username
         self.password = password
-        self.neighbors = []
+        self.sshKey = sshKey
+        self.active = 1
 
     def run(self):
         try:
             print 'Thread %i started' % self.id
-            writelog('Connecting', 0, self.id)
+            cr.log(logentry='Connecting', type=0, routerid=self.id)
             sshclient = paramiko.SSHClient()
             try:
                 sshclient.load_host_keys('hostkeys.cfg')
@@ -38,10 +53,19 @@ class Router(threading.Thread):
                 open('hostkeys.cfg', 'w').close()
                 sshclient.load_host_keys('hostkeys.cfg')
             sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            sshclient.connect(self.ip, username=self.username, password=self.password, timeout=20)
+            if self.sshKey:
+                print 'Using ssh key'
+                sshclient.connect(hostname=self.fqdn, port=self.port, pkey=paramiko.PKey(data=self.sshKey), timeout=20,
+                                  look_for_keys=False)
+            else:
+                print 'Using password'
+                sshclient.connect(hostname=self.fqdn, port=int(self.port), username=self.username,
+                                  password=self.password, timeout=20, look_for_keys=False)
+
             channel = sshclient.invoke_shell()
             stdin = channel.makefile('wb')
             stdout = channel.makefile('rb')
+
 
             # terminal length 0: set the number of lines of output to display on the terminal screen for the current session
             # show ipv6 neigh: display IPv6 neighbor discovery cache
@@ -50,15 +74,16 @@ class Router(threading.Thread):
             lines = stdout.readlines()
             timestamp = datetime.datetime.now()
             sshclient.close()
-            sshclient.save_host_keys('hostkeys.cfg')
+            #sshclient.save_host_keys('hostkeys.cfg')
             p6 = re.compile(
-                r'^(?P<ip>[\da-f:]+)[ \t]+(?P<age>[\d\-]+)[ \t]+(?P<mac>[\da-f\.]+)[ \t]+(?P<state>(STALE|REACH))[ \t]+(?P<if>[a-zA-Z\d]+)\Z',
+                r'^(?P<ip>[\da-f:]+)[ \t]+(?P<age>[\d\-]+)[ \t]+(?P<mac>[\da-f\.]+)[ \t]+(?P<state>(STALE|REACH))[ \t]+(?P<if>[a-zA-Z\d/-]+)\Z',
                 re.I)
             p4 = re.compile(
-                r'^(?P<protocol>[\da-zA-Z]+)[ \t]+(?P<ip>[\d\.]+)[ \t]+(?P<age>[\d\-]+)[ \t]+(?P<mac>[\da-f\.]+)[ \t]+(?P<type>(ARPA))[ \t]+(?P<if>[a-zA-Z\d]+)\Z',
+                r'^(?P<protocol>[\da-zA-Z]+)[ \t]+(?P<ip>[\d\.]+)[ \t]+(?P<age>[\d\-]+)[ \t]+(?P<mac>[\da-f\.]+)[ \t]+(?P<type>(ARPA))[ \t]+(?P<if>[a-zA-Z\d/-]+)\Z',
                 re.I)
-            clients = []
-            mode = 0 #0: no mode, 1: v6 neigh, 2: arp-cache
+            clients6 = []
+            clients4 = []
+            mode = 0  # 0: undefined, 1: v6 neigh, 2: arp-cache
             for line in lines:
                 line = line.strip()
                 if line.find('>show ipv6 neigh') > 0:
@@ -72,26 +97,33 @@ class Router(threading.Thread):
                 if mode == 1:
                     result = p6.match(line)
                     if result:
-                        clients.append(
-                            Client(result.group('ip'), result.group('mac').replace('.', ''), result.group('state'),
-                                   result.group('age'), self.id,
+                        clients6.append(
+                            Client6(result.group('ip'), result.group('mac').replace('.', ''), result.group('state'),
+                                    result.group('age'), self.id,
                                    result.group('if'),
-                                   timestamp - datetime.timedelta(minutes=int(result.group('age')))))
+                                   timestamp))
 
                 # parse arp cache
                 elif mode == 2:
                     result = p4.match(line)
                     if result:
-                        print result.group('ip') + ' | ' + result.group('mac')
-            print 'Thread finished: ' + self.ip
-            writelog('Finished with %i results' % len(clients), 0, self.id)
-            self.neighbors = clients
+                        clients4.append(
+                            Client4(result.group('ip'), result.group('mac').replace('.', ''), result.group('type'),
+                                    result.group('age'), self.id,
+                                    result.group('if'),
+                                    timestamp))
+
+            print 'Thread finished: ' + self.fqdn
+            cr.log(logentry='Finished with %i ipv6 and %i ipv4 results' % (len(clients6), len(clients4)), type=0,
+                   routerid=self.id)
+            self.neighbors = clients6
+            self.arp = clients4
         except Exception, e:
             print 'Thread %i failed: %s' % (self.id, str(e))
-            writelog('Error: %s' % str(e), 1, self.id)
+            cr.log(logentry='Error: %s' % str(e), type=1, routerid=self.id)
 
 
-class Client:
+class Client6:
     def __init__(self, ip, mac, state, age, router, interface, seen):
         self.ip = ip
         self.mac = mac
@@ -99,10 +131,94 @@ class Client:
         self.age = age
         self.router = router
         self.interface = interface
-        self.seen = seen
+        self.seen = seen - datetime.timedelta(minutes=int(age))
+
+
+class Client4:
+    def __init__(self, ip, mac, type, age, router, interface, seen):
+        self.ip = ip
+        self.mac = mac
+        self.type = type
+        self.router = router
+        self.interface = interface
+        if age == '-':
+            self.age = '0'
+        else:
+            self.age = age
+        self.seen = seen - datetime.timedelta(minutes=int(self.age))
+
+
+class Cronlog(Base):
+    __tablename__ = 'ipv6_cronlog'
+    id = Column(Integer, primary_key=True)
+    time = Column(DateTime)
+    cron_id = Column(Integer, ForeignKey('ipv6_cronruns.id'))
+    type = Column(Integer)
+    logentry = Column(String)
+    router_id = Column(Integer)
+
+    def __init__(self, time, logentry, type, routerid):
+        self.time = time
+        self.logentry = logentry
+        self.type = type
+        self.router_id = routerid
+
+
+class Cronrun(Base):
+    __tablename__ = 'ipv6_cronruns'
+    id = Column(Integer, primary_key=True)
+    starttime = Column(DateTime)
+    endtime = Column(DateTime)
+    logs = relationship('Cronlog')
+
+    def __init__(self):
+        self.starttime = func.now()
+        self.endtime = null()
+
+
+    def log(self, logentry, type, routerid=null()):
+        self.logs.append(Cronlog(time=func.now(), logentry=logentry, type=type, routerid=routerid))
+
+    def finish(self):
+        self.endtime = func.now()
+
+
+class Timelog(Base):
+    __tablename__ = 'ipv6_timelog'
+    id = Column(Integer, primary_key=True)
+    interface = Column(String)
+    lastseen = Column(DateTime)
+    hasBeenExported = Column(Integer)
+    ipId = Column(Integer, ForeignKey('ipv6_ipaddress.id'))
+    routerId = Column(Integer)
+
+    def __init__(self, interface, routerId):
+        self.lastseen = func.now()
+        self.interface = interface
+        self.hasBeenExported = 0
+        self.routerId = routerId
+
+
+class IpAddress(Base):
+    __tablename__ = 'ipv6_ipaddress'
+    id = Column(Integer, primary_key=True)
+    ipv4Address = Column(String)
+    ipv6Address = Column(String)
+    macAddress = Column(String)
+    added = Column(DateTime)
+    lastseen = Column(DateTime)
+    logs = relationship('Timelog')
+
+    def __init__(self, mac, v4='', v6=''):
+        self.ipv4Address = v4
+        self.ipv6Address = v6
+        self.macAddress = mac
+        self.lastseen = func.now()
+        self.added = func.now()
 
 
 print 'Main Thread started'
+
 starttime = time()
 print 'Parsing Config'
 config = ConfigParser.ConfigParser()
@@ -115,7 +231,7 @@ engine = create_engine(
 
 try:
     conn = engine.connect()
-except exc.OperationalError, e:
+except OperationalError, e:
     f = open('error.log', 'a')
     f.write('%s Fatal Error: %s\n' % (strftime("%Y-%m-%d %H:%M:%S"), str(e)))
     f.close()
@@ -123,51 +239,56 @@ except exc.OperationalError, e:
     sys.exit(0)
 
 metadata = MetaData(engine)
+Session = sessionmaker(bind=engine)
+session = Session()
 
-tbl_router = Table(u'ipv6_routerdata', metadata, autoload=True)
-tbl_logentry = Table(u'ipv6_logentry', metadata, autoload=True)
-tbl_timelog = Table(u'ipv6_timelog', metadata, autoload=True)
-tbl_cronruns = Table(u'ipv6_cronruns', metadata, autoload=True)
-tbl_cronlog = Table(u'ipv6_cronlog', metadata, autoload=True)
+cr = Cronrun()
+session.add(cr)
+cr.log('Main Thread started', 0)
+session.commit()
 
-res = tbl_cronruns.insert().values({'starttime': func.now()}).execute()
-cronrunid = res.lastrowid
-writelog('Main Thread started', 0)
+routerList = session.query(Router).filter(Router.active == 1).all()
 
-res = select([tbl_router.c.id, tbl_router.c.routerName, tbl_router.c.ipv4Address, tbl_router.c.username,
-              tbl_router.c.password]).where(tbl_router.c.active == 1).execute()
+res6 = []
+res4 = []
 
-threads = []
-routerList = []
-for row in res:
-    r = Router(row['id'], row['routerName'], row['ipv4Address'], row['username'], row['password'])
-    threads.append(r)
+# start threads
+for r in routerList:
     r.start()
 
-results = []
-
 # wait until all threads are finished
-for t in threads:
-    t.join()
-    results.extend(t.neighbors)
+for r in routerList:
+    r.join()
+    res6.extend(r.neighbors)
+    res4.extend(r.arp)
 
-print 'Writing Logs to Database'
+ipList = []
+for c in res4:
+    cur = session.query(IpAddress).filter(IpAddress.macAddress == c.mac, IpAddress.ipv4Address == c.ip).first()
+    if cur:
+        cur.lastseen = func.now()
+    else:
+        cur = IpAddress(mac=c.mac, v4=c.ip)
+        ipList.append(cur)
+    cur.logs.append(Timelog(interface=c.interface, routerId=c.router))
 
-for c in results:
-    try:
-        res = tbl_logentry.insert().values(
-            {'ipv6Address': c.ip, 'macAddress': c.mac, 'date_added': func.now(), 'RouterData': c.router}).execute()
-        logid = res.lastrowid
-    except exc.IntegrityError:
-        res = select([tbl_logentry.c.id]).where(
-            sql.and_(tbl_logentry.c.ipv6Address == c.ip, tbl_logentry.c.macAddress == c.mac)).execute()
-        logid = res.fetchone()[0]
-    finally:
-        tbl_timelog.insert().values({'lastseen': c.seen, 'logentry': logid}).execute()
+for c in res6:
+    cur = session.query(IpAddress).filter(IpAddress.macAddress == c.mac, IpAddress.ipv6Address == c.ip).first()
+    if cur:
+        cur.lastseen = func.now()
+    else:
+        cur = IpAddress(mac=c.mac, v6=c.ip)
+        ipList.append(cur)
+    cur.logs.append(Timelog(interface=c.interface, routerId=c.router))
 
-tbl_cronruns.update().values({'endtime': func.now()}).where(tbl_cronruns.c.id == cronrunid).execute()
+session.add_all(ipList)
+print 'Writing to DB...'
+session.commit()
+
 print 'Database finished'
-writelog('Main Thread finished with %i results from %i routers' % (len(results), len(threads)), 0)
+cr.log(logentry='Main Thread finished with %i results from %i routers' % (len(res6), len(routerList)), type=0)
+cr.finish()
+session.commit()
 conn.close()
 print 'Main Thread finished'
 print 'runtime: %f' % (time() - starttime)
