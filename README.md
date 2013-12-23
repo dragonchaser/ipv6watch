@@ -39,9 +39,8 @@ Run `webfrontend/app/console doctrine:schema:create`.
 
 Create initial user
 -------------------
-Run `webfrontend/app/console ipv6watch:createuser`
-
-If you want this User to be able to create other users you have to promote him to `ROLE_SUPER_ADMIN` using `webfrontend/app/console fos:user:promote`
+Run `webfrontend/app/console ipv6watch:createuser`.
+This will create a super admin (```ROLE_SUPER_ADMIN```) which as all privileges in the system.
 
 Use the project
 ---------------

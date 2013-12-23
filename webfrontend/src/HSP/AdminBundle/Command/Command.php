@@ -19,7 +19,6 @@ class Command extends ContainerAwareCommand
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    //$this->container = $this->getApplication()->getKernel()->getContainer();
     $output->writeln("Creating initial user");
     $dialog = $this->getHelperSet()->get('dialog');
     $username = $dialog->ask($output, "Please enter a username: ");
