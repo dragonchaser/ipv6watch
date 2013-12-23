@@ -26,7 +26,7 @@ class IPV6CronLog
 
   /**
    * @ORM\ManyToOne(targetEntity="IPV6CronRuns")
-   * @ORM\JoinColumn(name="IPV6CronRuns", referencedColumnName="id")
+   * @ORM\JoinColumn(name="cron_id", referencedColumnName="id")
    */
   private $cronid;
 
