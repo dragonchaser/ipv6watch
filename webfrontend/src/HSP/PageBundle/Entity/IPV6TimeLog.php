@@ -8,6 +8,7 @@
 
 namespace HSP\PageBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,6 +17,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class IPV6TimeLog
 {
+  public function __construct()
+  {
+    $this->ipId = new ArrayCollection();
+  }
+
   /**
    * @ORM\Id
    * @ORM\Column(type="integer")
@@ -45,7 +51,7 @@ class IPV6TimeLog
   private $hasBeenExported;
 
   /**
-   * @ORM\ManyToOne(targetEntity="IPV6Router")
+   * @ORM\ManyToMany(targetEntity="IPV6Router")
    * @ORM\JoinColumn(name="routerId", referencedColumnName="id")
    */
   private $RouterId;

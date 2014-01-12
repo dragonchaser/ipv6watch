@@ -18,9 +18,9 @@
 
             {% for lease in leases %}
                 <tr class="{{ cycle(['odd','even'], loop.index0) }}">
-                    <td>{{ lease.getIpv6Address }}</td>
-                    <td>{{ lease.getIpv4Address }}</td>
-                    <td>{{ lease.getMacAddress }}</td>
+                    <td>{{ dump(lease) }}</td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                 </tr>
             {% endfor %}
