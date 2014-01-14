@@ -26,6 +26,22 @@ Clone the project to a directory of your choice, make sure `webfrontend/web` can
 ```
 git clone https://github.com/ipv6Watch/ipv6watch.git
 ```
+Dependencies
+------------
+The project requires the following software packages to be installed
+
+- python2.7
+- python-paramiko
+- python-sqlalchemy
+- python-cryptopp
+- python-pysycopg2 / python-mysql
+- php5.4 (cli + apache/fpm required)
+- php-mysql / php-postgresql
+- mysql / postgresql
+- sass
+
+<b>Note:</b> We only support linux (gentoo/ubuntu/debian/...), if you attempt to run this software on a Windows-/OSX-/... machine you are on your own, but we appreciate any feedback if you get ipv6watch running on one of these Systems.
+
 Configure the database
 ----------------------
 Setup the database of your choice (we support only postgres and mysql).
