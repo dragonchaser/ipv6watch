@@ -34,6 +34,11 @@ class IPV6CronRuns
    */
   private $endtime;
 
+  public function getRuntime()
+  {
+    return $this->getStarttime()->diff($this->getEndtime())->s;
+  }
+
   /**
    * Get id
    *
@@ -76,7 +81,6 @@ class IPV6CronRuns
   public function setEndtime($endtime)
   {
     $this->endtime = $endtime;
-
     return $this;
   }
 

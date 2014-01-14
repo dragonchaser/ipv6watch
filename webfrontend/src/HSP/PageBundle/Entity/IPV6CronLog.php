@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class IPV6CronLog
 {
+
   /**
    * @ORM\Id
    * @ORM\Column(type="integer")
@@ -47,11 +48,6 @@ class IPV6CronLog
    * @ORM\Column(type="string");
    */
   private $logentry;
-
-  /**
-   * @ORM\Column(type="datetime")
-   */
-  private $endtime;
 
   /**
    * Get id

@@ -16,9 +16,10 @@ class LogController extends Controller
 {
   public function logViewerAction()
   {
-    // TODO: implement logviewer here
-    return $this->render('HSPAdminBundle:Default:logviewer.html.twig', array(
-      'name' => "admin"
+    $repository = $this->getDoctrine()->getRepository('HSPPageBundle:IPV6CronLog');
+    $logentries = $repository->findBy(array(), array('id' => 'DESC'), 50);
+    return $this->render('HSPAdminBundle:Default:loglist.html.twig', array(
+      'logentries' => $logentries
     ));
   }
 } 

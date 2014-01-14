@@ -27,7 +27,8 @@ class ConfigController extends Controller
       ->add('securityToken', 'text', array('label' => 'Export security token', 'required' => false))
       ->add('maxExportItems', 'number', array('label' => 'Export max. items', 'required' => false))
       ->add('enableExports', 'checkbox', array('label' => 'Export enabled', 'required' => false, 'value' => 1))
-      ->add('logPruningTime', 'number', array('label' => 'Log pruning time', 'required' => false))
+      ->add('logPruningTime', 'number', array('label' => 'Log pruning time (in days)', 'required' => false))
+      ->add('enablePruning', 'checkbox', array('label' => 'Enable pruning', 'required' => false, 'value' => 1))
       ->add('save', 'submit')->getForm();
     $form->handleRequest($request);
     if ($form->isValid()) {

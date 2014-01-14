@@ -49,3 +49,22 @@ div.flash-message {
   padding: 5px !important;
   font-weight: bold;
 }
+
+.pageFooter {
+  clear: both;
+  background-color: #FFFFFF;
+  border: 1px solid #DFDFDF;
+  border-radius: 5px;
+  padding: 5px !important;
+  margin-top: 10px !important;
+
+  .floatRight {
+    float: right;
+    text-align: right;
+  }
+
+  .floatLeft {
+    text-align: left;
+  }
+
+}

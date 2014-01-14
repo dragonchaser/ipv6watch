@@ -10,18 +10,22 @@
     <div class="userListTable">
         <table class="userListTable">
             <tr>
-                <th>IPV6</th>
-                <th>IPV4</th>
+                <th>IP(s)</th>
                 <th>MAC</th>
                 <th>Last seen</th>
             </tr>
 
             {% for lease in leases %}
                 <tr class="{{ cycle(['odd','even'], loop.index0) }}">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        {{ lease.ipId.ipv4Address }}&nbsp; {{ lease.ipId.ipv6Address }}
+                    </td>
+                    <td>
+                        {{ lease.ipId.macAddress }}
+                    </td>
+                    <td>
+                        {{ lease.ipId.lastseen|date('Y-m-d h:m:sü') }}
+                    </td>
                 </tr>
             {% endfor %}
         </table>

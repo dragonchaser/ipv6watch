@@ -44,6 +44,11 @@ class IPV6Config
   private $maxExportItems;
 
   /**
+   * @ORM\Column(type="boolean", nullable=true)
+   */
+  private $enablePruning;
+
+  /**
    * @param mixed $configInstanceName
    */
   public function setConfigInstanceName($configInstanceName)
@@ -123,4 +128,27 @@ class IPV6Config
     return $this->maxExportItems;
   }
 
-} 
+
+  /**
+   * Set enablePruning
+   *
+   * @param boolean $enablePruning
+   * @return IPV6Config
+   */
+  public function setEnablePruning($enablePruning)
+  {
+    $this->enablePruning = $enablePruning;
+
+    return $this;
+  }
+
+  /**
+   * Get enablePruning
+   *
+   * @return boolean
+   */
+  public function getEnablePruning()
+  {
+    return $this->enablePruning;
+  }
+}

@@ -13,6 +13,10 @@ class Builder extends ContainerAware
 
 
     if ($securityContext = $this->container->get('security.context')->getToken()->getUser() != 'anon.') {
+      $menu->addChild('Leases', array('route' => 'hsp_admin_leaselist'))
+        ->addChild('Export', array('route' => 'hsp_admin_lease_exports'));
+
+      $menu->addChild('Log', array('route' => 'hsp_admin_log'));
       $menu->addChild('Config', array('route' => 'hsp_admin_edit_config'))
         // generate user submenu
         ->addChild('User', array('route' => 'hsp_admin_user_handling'))
@@ -23,10 +27,6 @@ class Builder extends ContainerAware
         ->addChild('Router', array('route' => 'hsp_admin_router_handling'))
         ->addChild('Add Router', array('route' => 'hsp_admin_router_add'));
 
-      $menu->addChild('Leases', array('route' => 'hsp_admin_leaselist'))
-        ->addChild('Export', array('route' => 'hsp_admin_lease_exports'));
-
-      $menu->addChild('Log', array('route' => 'hsp_admin_log'));
     }
     return $menu;
   }
