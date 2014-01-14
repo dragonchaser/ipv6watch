@@ -6,5 +6,24 @@
     {{ knp_menu_render('HSPPageBundle:Builder:mainMenu') }}
 {% endblock %}
 {% block content %}
-    statistics block
+    <div class="userListTable">
+        <table class="userListTable">
+            <tr>
+                <th>Logentries in database</th>
+                <td>{{ logCount }}</td>
+            </tr>
+            <tr>
+                <th>Tracked IPs in database</th>
+                <td>{{ ipCount }}</td>
+            </tr>
+            <tr>
+                <th>Tracked Routers</th>
+                <td>{{ routerCount }}</td>
+            </tr>
+            <tr>
+                <th>Total cronjob count</th>
+                <td>{{ runCount }}</td>
+            </tr>
+        </table>
+    </div>
 {% endblock %}
