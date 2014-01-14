@@ -45,10 +45,9 @@ class LeaseController extends Controller
     $this->get('session')->getFlashBag()->set('notice', $formData['filterBy']);
 
     $repository = $this->getDoctrine()->getRepository('HSPPageBundle:IPV6TimeLog');
-
-    if (empty($formData['filter']))
+    if (empty($formData['filter'])) {
       $entries = $repository->findAll();
-    else
+    } else {
       switch ($formData['filter']) {
         case 'ipv6':
           $entries = $repository->findByipv6Address($formData['filter']);
@@ -64,6 +63,7 @@ class LeaseController extends Controller
           $entries = $repository->findByipv6Address($formData['filter']);
           break;
       }
+    }
     return $this->render('HSPAdminBundle:Default:leaselist.html.twig',
       array('leases' => $entries, 'form' => $form->createView()));
   }
