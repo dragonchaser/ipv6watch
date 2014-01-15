@@ -26,12 +26,11 @@ class LeaseController extends Controller
   public function leaseListAction(Request $request)
   {
     $form = $this->createFormBuilder()
-      ->add('filter', 'text', array('label' => 'search for', 'required' => false))
+      ->add('filter', 'text', array('label' => 'search for', 'required' => true))
       ->add('filterBy', 'choice', array(
         'choices' => array(
-          'any' => 'any',
-          'ipv6' => 'IPV6 Address',
           'ipv4' => 'IPV4 Address',
+          'ipv6' => 'IPV6 Address',
           'max' => 'MAC Address'
         ),
         'label' => 'in'
@@ -42,52 +41,39 @@ class LeaseController extends Controller
     $formData = $form->getData();
     if (!isset($formData['filterBy'])) $formData['filterBy'] = 'any';
     if (!isset($formData['filter'])) $formData['filter'] = ''; else $formData['filter'] = trim($formData['filter']);
-    $this->get('session')->getFlashBag()->set('notice', $formData['filterBy']);
 
-    var_dump($formData);
     $em = $this->getDoctrine()->getManager();
     $repository = $this->getDoctrine()->getRepository('HSPPageBundle:IPV6TimeLog');
+    $formData['filter'] = preg_replace('/\*/', '%', $formData['filter']);
     if ($formData['filterBy'] == 'any' || $formData['filterBy'] == '') {
-      echo "baz";
       $entries = $repository->findAll();
     } else {
-      echo "foon";
       switch ($formData['filterBy']) {
         case 'ipv6':
-          echo "v6";
           $query = $em->createQuery('SELECT tl FROM HSPPageBundle:IPV6Timelog tl
                                       JOIN HSPPageBundle:IPV6IpAddress ia
                                       WHERE
-                                        ia.ipv6Address = :ipv6Addr');
+                                        ia.ipv6Address = LIKE :ipv6Addr AND ia.id = tl.ipId');
           $query->setParameter('ipv6Addr', $formData['filter']);
-          $entries = $query->getResult();
           break;
         case 'ipv4':
-          echo "v4";
           $query = $em->createQuery('SELECT tl FROM HSPPageBundle:IPV6Timelog tl
                                       JOIN HSPPageBundle:IPV6IpAddress ia
                                       WHERE
-                                        ia.ipv4Address = :ipv4Addr');
+                                        ia.ipv4Address LIKE :ipv4Addr AND ia.id = tl.ipId');
           $query->setParameter('ipv4Addr', $formData['filter']);
-          $entries = $query->getResult();
           break;
         case 'mac':
-          echo "mac";
           $query = $em->createQuery('SELECT tl FROM HSPPageBundle:IPV6Timelog tl
                                       JOIN HSPPageBundle:IPV6IpAddress ia
                                       WHERE
-                                        ia.macAddress = :macAddr');
+                                        ia.macAddress LIKE :macAddr AND ia.id = tl.ipId');
           $query->setParameter('macAddr', $formData['filter']);
-          $entries = $query->getResult();
           break;
         default:
-        case 'any';
-        //$entries = $repository->findByipv6Address($formData['filter']);
-        break;
-      }
+      };
+      $entries = $query->getResult();
     }
-    var_dump($entries);
-    die();
     return $this->render('HSPAdminBundle:Default:leaselist.html.twig',
       array('leases' => $entries, 'form' => $form->createView()));
   }
