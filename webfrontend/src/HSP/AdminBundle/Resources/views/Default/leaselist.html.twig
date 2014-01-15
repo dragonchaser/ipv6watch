@@ -12,19 +12,26 @@
             <tr>
                 <th>IP(s)</th>
                 <th>MAC</th>
-                <th>Last seen</th>
+                <th>First seen<br/>Last seen</th>
+                <th>Routername<br/>RouterFQDN<br/>Interface</th>
             </tr>
 
             {% for lease in leases %}
                 <tr class="{{ cycle(['odd','even'], loop.index0) }}">
                     <td>
-                        {{ lease.ipId.ipv4Address }}&nbsp; {{ lease.ipId.ipv6Address }}
+                        {{ lease.ipId.ipv4Address }}{{ lease.ipId.ipv6Address }}
                     </td>
                     <td>
                         {{ lease.ipId.macAddress }}
                     </td>
                     <td>
+                        {{ lease.ipId.added|date('Y-m-d h:m:s') }}<br/>
                         {{ lease.ipId.lastseen|date('Y-m-d h:m:s') }}
+                    </td>
+                    <td>
+                        {{ lease.routerId.routerName }}<br/>
+                        {{ lease.routerId.fqdn }}<br/>
+                        {{ lease.interface }}
                     </td>
                 </tr>
             {% endfor %}

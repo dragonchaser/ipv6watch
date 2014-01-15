@@ -83,9 +83,11 @@ class LeaseController extends Controller
         default:
         case 'any';
         //$entries = $repository->findByipv6Address($formData['filter']);
-      break;
+        break;
       }
     }
+    var_dump($entries);
+    die();
     return $this->render('HSPAdminBundle:Default:leaselist.html.twig',
       array('leases' => $entries, 'form' => $form->createView()));
   }
@@ -120,10 +122,19 @@ class LeaseController extends Controller
       return new RedirectResponse($this->generateUrl('hsp_admin_link'));
     }
     $entries = $this->getDoctrine()->getManager()->createQuery('SELECT tl FROM HSPPageBundle:IPV6TimeLog tl JOIN HSPPageBundle:IPV6Router rt WHERE tl.hasBeenExported = 0')->getResult();
-    //todo: mark every exported item with 1 in database
+    $i = 0;
+    foreach ($entries as $lease) {
+      if ($i == $this->get('hsp_admin.config')->getConfig()->getMaxExportItems()) break;
+      $em = $this->getDoctrine()->getManager();
+      $query = $em->createQuery('UPDATE HSPPageBundle:IPV6TimeLog tl SET tl.hasBeenExported = 1 WHERE tl.id = :id');
+      $query->setParameter('id', $lease->getId());
+      $query->execute();
+      $leases[] = $lease;
+      $i++;
+    }
     return $this->render('HSPAdminBundle:Default:export.csv.twig',
       array(
-        'leases' => $entries)
+        'leases' => $leases)
     );
   }
 } 
