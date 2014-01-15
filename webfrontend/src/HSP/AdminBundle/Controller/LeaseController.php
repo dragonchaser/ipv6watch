@@ -119,7 +119,7 @@ class LeaseController extends Controller
     ) {
       return new RedirectResponse($this->generateUrl('hsp_admin_link'));
     }
-    $entries = $this->getDoctrine()->getManager()->createQuery('SELECT tl FROM HSPPageBundle:IPV6TimeLog tl WHERE tl.hasBeenExported = 0')->getResult();
+    $entries = $this->getDoctrine()->getManager()->createQuery('SELECT tl FROM HSPPageBundle:IPV6TimeLog tl JOIN HSPPageBundle:IPV6Router rt WHERE tl.hasBeenExported = 0')->getResult();
     //todo: mark every exported item with 1 in database
     return $this->render('HSPAdminBundle:Default:export.csv.twig',
       array(

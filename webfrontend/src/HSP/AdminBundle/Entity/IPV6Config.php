@@ -31,8 +31,8 @@ class IPV6Config
   /**
    * @ORM\Column(type="boolean", nullable=true)
    */
-
   private $enableExports;
+
   /**
    * @ORM\Column(type="integer", nullable=true)
    */

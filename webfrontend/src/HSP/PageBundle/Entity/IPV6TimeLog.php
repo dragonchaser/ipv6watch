@@ -51,7 +51,7 @@ class IPV6TimeLog
   private $hasBeenExported;
 
   /**
-   * @ORM\ManyToMany(targetEntity="IPV6Router")
+   * @ORM\ManyToOne(targetEntity="IPV6Router")
    * @ORM\JoinColumn(name="routerId", referencedColumnName="id")
    */
   private $RouterId;
