@@ -3,8 +3,6 @@ import re
 import threading
 import ConfigParser
 from time import time, strftime
-import sys
-
 import paramiko
 from sqlalchemy import orm
 from sqlalchemy.exc import OperationalError
@@ -18,28 +16,28 @@ Base = declarative_base()
 class Router(Base, threading.Thread):
     __tablename__ = 'ipv6_router'
     id = Column(Integer, primary_key=True)
-    routerName = Column(String)
+    routername = Column(String)
     fqdn = Column(String)
     port = Column(Integer)
     active = Column(Integer)
     username = Column(String)
     password = Column(String)
-    sshKey = Column(UnicodeText)
-    neighbors = []
-    arp = []
+    sshkey = Column(UnicodeText)
+    neighbors = []  # results from neighborhood discovery (ipv6)
+    arp = []  # results from arp cache (ipv4)
 
     @orm.reconstructor
     def init_on_load(self):
         threading.Thread.__init__(self)
 
-    def __init__(self, routerName, fqdn, port, username, password, sshKey):
+    def __init__(self, routername, fqdn, port, username, password, sshkey):
         threading.Thread.__init__(self)
-        self.routerName = routerName
+        self.routername = routername
         self.fqdn = fqdn
         self.port = port
         self.username = username
         self.password = password
-        self.sshKey = sshKey
+        self.sshkey = sshkey
         self.active = 1
 
     def run(self):
@@ -47,25 +45,29 @@ class Router(Base, threading.Thread):
             print 'Thread %i started' % self.id
             cr.log(logentry='Connecting', type=0, routerid=self.id)
             sshclient = paramiko.SSHClient()
+
+            # load the hostkeys from hostkeys.cfg
             try:
                 sshclient.load_host_keys('hostkeys.cfg')
             except IOError:
+                # hostkeys.cfg doesn't exist, let's create it
                 open('hostkeys.cfg', 'w').close()
                 sshclient.load_host_keys('hostkeys.cfg')
+
+            # automatically add new host keys on first connection
             sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            if self.sshKey:
-                print 'Using ssh key'
-                sshclient.connect(hostname=self.fqdn, port=self.port, pkey=paramiko.PKey(data=self.sshKey), timeout=20,
+            if self.sshkey:
+                # login using ssh-key
+                sshclient.connect(hostname=self.fqdn, port=self.port, pkey=paramiko.PKey(data=self.sshkey), timeout=20,
                                   look_for_keys=False)
             else:
-                print 'Using password'
+                # login using username/password
                 sshclient.connect(hostname=self.fqdn, port=int(self.port), username=self.username,
                                   password=self.password, timeout=20, look_for_keys=False)
 
             channel = sshclient.invoke_shell()
             stdin = channel.makefile('wb')
             stdout = channel.makefile('rb')
-
 
             # terminal length 0: set the number of lines of output to display on the terminal screen for the current session
             # show ipv6 neigh: display IPv6 neighbor discovery cache
@@ -74,34 +76,38 @@ class Router(Base, threading.Thread):
             lines = stdout.readlines()
             timestamp = datetime.datetime.now()
             sshclient.close()
-            #sshclient.save_host_keys('hostkeys.cfg')
+            sshclient.save_host_keys('hostkeys.cfg')
+
+            # regex for parsing the neighborhood discovery output
             p6 = re.compile(
                 r'^(?P<ip>[\da-f:]+)[ \t]+(?P<age>[\d\-]+)[ \t]+(?P<mac>[\da-f\.]+)[ \t]+(?P<state>(STALE|REACH))[ \t]+(?P<if>[a-zA-Z\d/-]+)\Z',
                 re.I)
+
+            # regex for parsing the arp cache output
             p4 = re.compile(
                 r'^(?P<protocol>[\da-zA-Z]+)[ \t]+(?P<ip>[\d\.]+)[ \t]+(?P<age>[\d\-]+)[ \t]+(?P<mac>[\da-f\.]+)[ \t]+(?P<type>(ARPA))[ \t]+(?P<if>[a-zA-Z\d/-]+)\Z',
                 re.I)
+
             clients6 = []
             clients4 = []
-            mode = 0  # 0: undefined, 1: v6 neigh, 2: arp-cache
+            mode = 0  # 0: undefined, 1: v6/neigh, 2: v4/arp-cache
             for line in lines:
                 line = line.strip()
                 if line.find('>show ipv6 neigh') > 0:
                     mode = 1
-                    print 'mode changed: v6 neigh'
                 elif line.find('>show ip arp') > 0:
                     mode = 2
-                    print 'mode changed: arp'
 
                 # parse ipv6 neigh cache
                 if mode == 1:
                     result = p6.match(line)
-                    if result:
+                    # ignore fe80-IPs
+                    if result and result.group('ip').partition(':')[0].lower() != 'fe80':
                         clients6.append(
                             Client6(result.group('ip'), result.group('mac').replace('.', ''), result.group('state'),
                                     result.group('age'), self.id,
-                                   result.group('if'),
-                                   timestamp))
+                                    result.group('if'),
+                                    timestamp))
 
                 # parse arp cache
                 elif mode == 2:
@@ -113,7 +119,8 @@ class Router(Base, threading.Thread):
                                     result.group('if'),
                                     timestamp))
 
-            print 'Thread finished: ' + self.fqdn
+            print 'Thread %i finished' % self.id
+
             cr.log(logentry='Finished with %i ipv6 and %i ipv4 results' % (len(clients6), len(clients4)), type=0,
                    routerid=self.id)
             self.neighbors = clients6
@@ -131,6 +138,7 @@ class Client6:
         self.age = age
         self.router = router
         self.interface = interface
+        # calculate last seen time based on age
         self.seen = seen - datetime.timedelta(minutes=int(age))
 
 
@@ -141,10 +149,12 @@ class Client4:
         self.type = type
         self.router = router
         self.interface = interface
+        # arp cache output can contain '-' as age
         if age == '-':
             self.age = '0'
         else:
             self.age = age
+            # calculate last seen time based on age
         self.seen = seen - datetime.timedelta(minutes=int(self.age))
 
 
@@ -175,7 +185,6 @@ class Cronrun(Base):
         self.starttime = func.now()
         self.endtime = null()
 
-
     def log(self, logentry, type, routerid=null()):
         self.logs.append(Cronlog(time=func.now(), logentry=logentry, type=type, routerid=routerid))
 
@@ -188,39 +197,37 @@ class Timelog(Base):
     id = Column(Integer, primary_key=True)
     interface = Column(String)
     lastseen = Column(DateTime)
-    hasBeenExported = Column(Integer)
-    ipId = Column(Integer, ForeignKey('ipv6_ipaddress.id'))
-    routerId = Column(Integer)
+    hasbeenexported = Column(Integer)
+    ipid = Column(Integer, ForeignKey('ipv6_ipaddress.id'))
+    routerid = Column(Integer)
 
     def __init__(self, interface, routerId):
         self.lastseen = func.now()
         self.interface = interface
-        self.hasBeenExported = 0
-        self.routerId = routerId
+        self.hasbeenexported = 0
+        self.routerid = routerId
 
 
 class IpAddress(Base):
     __tablename__ = 'ipv6_ipaddress'
     id = Column(Integer, primary_key=True)
-    ipv4Address = Column(String)
-    ipv6Address = Column(String)
-    macAddress = Column(String)
+    ipv4address = Column(String)
+    ipv6address = Column(String)
+    macaddress = Column(String)
     added = Column(DateTime)
     lastseen = Column(DateTime)
     logs = relationship('Timelog')
 
     def __init__(self, mac, v4='', v6=''):
-        self.ipv4Address = v4
-        self.ipv6Address = v6
-        self.macAddress = mac
+        self.ipv4address = v4
+        self.ipv6address = v6
+        self.macaddress = mac
         self.lastseen = func.now()
         self.added = func.now()
 
-
-print 'Main Thread started'
-
 starttime = time()
-print 'Parsing Config'
+
+# read the config.cfg
 config = ConfigParser.ConfigParser()
 config.read('config.cfg')
 
@@ -247,7 +254,8 @@ session.add(cr)
 cr.log('Main Thread started', 0)
 session.commit()
 
-routerList = session.query(Router).filter(Router.active == 1).all()
+# get all active router objects
+routerList = session.query(Router).filter(Router.active == True).all()
 
 res6 = []
 res4 = []
@@ -264,7 +272,7 @@ for r in routerList:
 
 ipList = []
 for c in res4:
-    cur = session.query(IpAddress).filter(IpAddress.macAddress == c.mac, IpAddress.ipv4Address == c.ip).first()
+    cur = session.query(IpAddress).filter(IpAddress.macaddress == c.mac, IpAddress.ipv4address == c.ip).first()
     if cur:
         cur.lastseen = func.now()
     else:
@@ -273,7 +281,7 @@ for c in res4:
     cur.logs.append(Timelog(interface=c.interface, routerId=c.router))
 
 for c in res6:
-    cur = session.query(IpAddress).filter(IpAddress.macAddress == c.mac, IpAddress.ipv6Address == c.ip).first()
+    cur = session.query(IpAddress).filter(IpAddress.macaddress == c.mac, IpAddress.ipv6address == c.ip).first()
     if cur:
         cur.lastseen = func.now()
     else:
@@ -282,13 +290,10 @@ for c in res6:
     cur.logs.append(Timelog(interface=c.interface, routerId=c.router))
 
 session.add_all(ipList)
-print 'Writing to DB...'
 session.commit()
 
-print 'Database finished'
-cr.log(logentry='Main Thread finished with %i results from %i routers' % (len(res6), len(routerList)), type=0)
+cr.log(logentry='Main Thread finished with %i results from %i routers in %.2f seconds' % (
+len(res6), len(routerList), (time() - starttime)), type=0)
 cr.finish()
 session.commit()
 conn.close()
-print 'Main Thread finished'
-print 'runtime: %f' % (time() - starttime)
