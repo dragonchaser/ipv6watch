@@ -21,7 +21,7 @@ class IPV6Router
   /**
    * @ORM\id
    * @ORM\Column(type="integer")
-   * @ORM\GeneratedValue(strategy="AUTO")
+   * @ORM\GeneratedValue(strategy="IDENTITY")
    */
   private $id;
 

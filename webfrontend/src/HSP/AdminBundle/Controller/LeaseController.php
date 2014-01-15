@@ -44,24 +44,46 @@ class LeaseController extends Controller
     if (!isset($formData['filter'])) $formData['filter'] = ''; else $formData['filter'] = trim($formData['filter']);
     $this->get('session')->getFlashBag()->set('notice', $formData['filterBy']);
 
+    var_dump($formData);
+    $em = $this->getDoctrine()->getManager();
     $repository = $this->getDoctrine()->getRepository('HSPPageBundle:IPV6TimeLog');
-    if (empty($formData['filter'])) {
+    if ($formData['filterBy'] == 'any' || $formData['filterBy'] == '') {
+      echo "baz";
       $entries = $repository->findAll();
     } else {
-      switch ($formData['filter']) {
+      echo "foon";
+      switch ($formData['filterBy']) {
         case 'ipv6':
-          $entries = $repository->findByipv6Address($formData['filter']);
+          echo "v6";
+          $query = $em->createQuery('SELECT tl FROM HSPPageBundle:IPV6Timelog tl
+                                      JOIN HSPPageBundle:IPV6IpAddress ia
+                                      WHERE
+                                        ia.ipv6Address = :ipv6Addr');
+          $query->setParameter('ipv6Addr', $formData['filter']);
+          $entries = $query->getResult();
           break;
         case 'ipv4':
-          $entries = $repository->findByipv4Address($formData['filter']);
+          echo "v4";
+          $query = $em->createQuery('SELECT tl FROM HSPPageBundle:IPV6Timelog tl
+                                      JOIN HSPPageBundle:IPV6IpAddress ia
+                                      WHERE
+                                        ia.ipv4Address = :ipv4Addr');
+          $query->setParameter('ipv4Addr', $formData['filter']);
+          $entries = $query->getResult();
           break;
         case 'mac':
-          $entries = $repository->findBymacAddress($formData['filter']);
+          echo "mac";
+          $query = $em->createQuery('SELECT tl FROM HSPPageBundle:IPV6Timelog tl
+                                      JOIN HSPPageBundle:IPV6IpAddress ia
+                                      WHERE
+                                        ia.macAddress = :macAddr');
+          $query->setParameter('macAddr', $formData['filter']);
+          $entries = $query->getResult();
           break;
         default:
         case 'any';
-          $entries = $repository->findByipv6Address($formData['filter']);
-          break;
+        //$entries = $repository->findByipv6Address($formData['filter']);
+      break;
       }
     }
     return $this->render('HSPAdminBundle:Default:leaselist.html.twig',
@@ -97,6 +119,11 @@ class LeaseController extends Controller
     ) {
       return new RedirectResponse($this->generateUrl('hsp_admin_link'));
     }
-    return $this->render('HSPAdminBundle:Default:export.csv.twig', array('name' => 'CSV'));
+    $entries = $this->getDoctrine()->getManager()->createQuery('SELECT tl FROM HSPPageBundle:IPV6TimeLog tl WHERE tl.hasBeenExported = 0')->getResult();
+    //todo: mark every exported item with 1 in database
+    return $this->render('HSPAdminBundle:Default:export.csv.twig',
+      array(
+        'leases' => $entries)
+    );
   }
 } 

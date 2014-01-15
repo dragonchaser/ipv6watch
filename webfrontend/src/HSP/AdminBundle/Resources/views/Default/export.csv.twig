@@ -1,1 +1,5 @@
-CSV!
+"ipv6Address","ipv4Address","macAddress","lastSeen","routerFQDN","routerInterface"
+{% for lease in leases %}
+    "{{ lease.ipId.ipv6Address }}","{{ lease.ipId.ipv4Address }}","{{ lease.ipId.macAddress }}","{{ lease.lastseen|date('Y-m-d h:m:s') }}","{{ dump(lease.routerId.routerName) }}"
+    <br>
+{% endfor %}
