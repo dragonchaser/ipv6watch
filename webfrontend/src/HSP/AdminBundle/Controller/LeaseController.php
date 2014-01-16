@@ -31,7 +31,7 @@ class LeaseController extends Controller
         'choices' => array(
           'ipv4' => 'IPV4 Address',
           'ipv6' => 'IPV6 Address',
-          'max' => 'MAC Address'
+          'mac' => 'MAC Address'
         ),
         'label' => 'in'
       ))
@@ -53,7 +53,7 @@ class LeaseController extends Controller
           $query = $em->createQuery('SELECT tl FROM HSPPageBundle:IPV6Timelog tl
                                       JOIN HSPPageBundle:IPV6IpAddress ia
                                       WHERE
-                                        ia.ipv6Address = LIKE :ipv6Addr AND ia.id = tl.ipId');
+                                        ia.ipv6Address LIKE :ipv6Addr AND ia.id = tl.ipId');
           $query->setParameter('ipv6Addr', $formData['filter']);
           break;
         case 'ipv4':
@@ -72,7 +72,7 @@ class LeaseController extends Controller
           break;
         default:
       };
-      $entries = $query->getResult();
+      //$entries = $query->getResult();
     }
     return $this->render('HSPAdminBundle:Default:leaselist.html.twig',
       array('leases' => $entries, 'form' => $form->createView()));
