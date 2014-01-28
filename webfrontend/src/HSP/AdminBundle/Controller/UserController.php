@@ -68,17 +68,17 @@ class UserController extends Controller
    * @param null $username
    * @return \Symfony\Component\HttpFoundation\Response
    */
-  public function userAddEditAction($username = -1, Request $request)
+  public function userAddEditAction(Request $request, $username = null)
   {
-    if ($username !== -1) {
+    if ($username !== null) {
       $userManager = $this->get('fos_user.user_manager');
       if (!($user = $userManager->findUserBy(array('username' => $username)))) {
         $this->get('session')->getFlashbag()->add('notice', $username . ' not found!');
-        $username = -1;
+        $username = null;
         return new RedirectResponse($this->generateUrl('hsp_admin_user_handling'));
       }
     }
-    if ($username == -1) {
+    if ($username == null) {
       $user = new User();
     }
     $form = $this->createFormBuilder($user)

@@ -30,16 +30,16 @@ class RouterController extends Controller
    * create user form to add a router, and create new entry if postdata is given
    * @return \Symfony\Component\HttpFoundation\Response
    */
-  public function routerAddEditAction($routerid = -1, Request $request)
+  public function routerAddEditAction(Request $request, $routerid = null)
   {
-    if ($routerid !== -1) {
+    if ($routerid !== null) {
       $em = $this->getDoctrine()->getManager()->getRepository('HSPPageBundle:IPV6Router');
       if (!$tmpRouter = $em->find($routerid)) {
         $this->get('session')->getFlashbag()->set('notice', 'Router not found!');
         return new RedirectResponse($this->generateUrl('hsp_admin_router_handling'));
       }
     }
-    if ($routerid === -1)
+    if ($routerid === null)
       $tmpRouter = new IPV6Router();
     $form = $this->createFormBuilder($tmpRouter)
       ->add('routername', 'text', array('label' => 'Routername', 'required' => true))
