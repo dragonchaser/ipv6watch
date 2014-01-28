@@ -20,7 +20,6 @@
                     <td>{{ router.getfqdn() }}</td>
                     <td>
                         <a href="{{ path('hsp_admin_router_edit', {'routerid':router.getid()}) }}">edit</a><br/>
-                        <a href="{{ path('hsp_admin_router_delete',{'routerid':router.getid()}) }}">delete</a>
                     </td>
                 </tr>
             {% endfor %}
