@@ -45,6 +45,7 @@ class Router(Base, threading.Thread):
             print 'Thread %i started' % self.id
             cr.log(logentry='Connecting', type=0, routerid=self.id)
             sshclient = paramiko.SSHClient()
+            sshclient.known_hosts = None
 
             # load the hostkeys from hostkeys.cfg
             try:
@@ -225,16 +226,29 @@ class IpAddress(Base):
         self.lastseen = func.now()
         self.added = func.now()
 
+
+def prune():
+    prunetime = datetime.datetime.today() - datetime.timedelta(days=1)
+    res_timelog = session.query(Timelog).filter(Timelog.hasbeenexported == 1).filter(
+        Timelog.lastseen < prunetime).delete()
+    res_ip = session.query(IpAddress).filter(IpAddress.logs == None).delete(synchronize_session='fetch')
+    cr.log(logentry='Pruning: deleted %i Logentrys and %i orphaned ipAddresses' % (res_timelog, res_ip), type=0)
+
+
 starttime = time()
 
 # read the config.cfg
 config = ConfigParser.ConfigParser()
 config.read('config.cfg')
 
-engine = create_engine(
-    config.get('Database', 'type') + '://' + config.get('Database', 'user') + ':' + config.get('Database',
-                                                                                               'pass') + '@' + config.get(
-        'Database', 'host') + '/' + config.get('Database', 'database'), echo=False)
+# engine = create_engine(
+#     config.get('Database', 'type') + '://' + config.get('Database', 'user') + ':' + config.get('Database',
+#                                                                                                'pass') + '@' + config.get(
+#         'Database', 'host') + '/' + config.get('Database', 'database'), echo=False)
+
+engine = create_engine('%s://%s:%s@%s/%s' % (
+config.get('Database', 'type'), config.get('Database', 'user'), config.get('Database', 'pass'),
+config.get('Database', 'host'), config.get('Database', 'database')), echo=False)
 
 try:
     conn = engine.connect()
@@ -294,6 +308,9 @@ session.commit()
 
 cr.log(logentry='Main Thread finished with %i results from %i routers in %.2f seconds' % (
 len(res6), len(routerList), (time() - starttime)), type=0)
+
+prune()
+
 cr.finish()
 session.commit()
 conn.close()
