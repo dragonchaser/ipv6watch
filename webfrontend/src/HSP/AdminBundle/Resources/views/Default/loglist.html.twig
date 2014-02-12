@@ -16,7 +16,7 @@
             {% for logentry in logentries %}
                 <tr class="{{ cycle(['odd','even'], loop.index0) }}">
                     <td>
-                        {{ logentry.time | date('Y-m-d H:m:s') }}
+                        {{ logentry.time | date('Y-m-d H:i:s') }}
                     </td>
                     <td>
                     {% if logentry.routerId is not null %}
@@ -31,7 +31,7 @@
                     <td>
                         {% if logentry.cronid is not null %}
                             <span style="cursor: pointer"
-                                  title="Startime: {{ logentry.cronid.starttime|date('Y/m/d - h:m:s') }} - Endtime: {{ logentry.cronid.endtime|date('Y/m/d - h:m:s') }} - Runtime: {{ logentry.cronid.runtime }}s">{{ logentry.cronid.id }}</span>
+                                  title="Startime: {{ logentry.cronid.starttime|date('Y/m/d - H:i:s') }} - Endtime: {{ logentry.cronid.endtime|date('Y/m/d - H:i:s') }} - Runtime: {{ logentry.cronid.runtime }}s">{{ logentry.cronid.id }}</span>
                         {% endif %}
                     </td>
                 </tr>
