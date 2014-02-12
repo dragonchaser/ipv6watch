@@ -16,7 +16,7 @@
             {% for logentry in logentries %}
                 <tr class="{{ cycle(['odd','even'], loop.index0) }}">
                     <td>
-                        {{ logentry.time | date('Y-m-d h:m:s') }}
+                        {{ logentry.time | date('Y-m-d H:m:s') }}
                     </td>
                     <td>
                     {% if logentry.routerId is not null %}
