@@ -7,6 +7,7 @@
     <div class="userListTable">
         <table class="userListTable">
             <tr>
+                <th>Time</th>
                 <th>Router</th>
                 <th>Logentry</th>
                 <th>Cronrun</th>
@@ -15,7 +16,10 @@
             {% for logentry in logentries %}
                 <tr class="{{ cycle(['odd','even'], loop.index0) }}">
                     <td>
-                        {% if logentry.routerId is not null %}
+                        {{ logentry.time | date('Y-m-d h:m:s') }}
+                    </td>
+                    <td>
+                    {% if logentry.routerId is not null %}
                             {{ logentry.routerId.routerName }}
                         {% endif %}
                     </td>
