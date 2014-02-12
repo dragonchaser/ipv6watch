@@ -227,9 +227,19 @@ class IpAddress(Base):
         self.added = func.now()
 
 
+class Symfony_Config(Base):
+    __tablename__ = 'ipv6_config'
+    configInstanceName = Column(String, primary_key=True)
+    securityToken = Column(String)
+    enableExports = Column(Integer)
+    logPruningTime = Column(Integer)
+    maxExportItems = Column(Integer)
+    enablePruning = Column(Integer)
+
+
 def prune():
-    prunetime = datetime.datetime.today() - datetime.timedelta(days=1)
-    res_timelog = session.query(Timelog).filter(Timelog.hasbeenexported == 1).filter(
+    prunetime = datetime.datetime.today() - datetime.timedelta(days=s_cfg.logPruningTime)
+    res_timelog = session.query(Timelog).filter(
         Timelog.lastseen < prunetime).delete()
     res_ip = session.query(IpAddress).filter(IpAddress.logs == None).delete(synchronize_session='fetch')
     cr.log(logentry='Pruning: deleted %i Logentrys and %i orphaned ipAddresses' % (res_timelog, res_ip), type=0)
@@ -240,11 +250,6 @@ starttime = time()
 # read the config.cfg
 config = ConfigParser.ConfigParser()
 config.read('config.cfg')
-
-# engine = create_engine(
-#     config.get('Database', 'type') + '://' + config.get('Database', 'user') + ':' + config.get('Database',
-#                                                                                                'pass') + '@' + config.get(
-#         'Database', 'host') + '/' + config.get('Database', 'database'), echo=False)
 
 engine = create_engine('%s://%s:%s@%s/%s' % (
 config.get('Database', 'type'), config.get('Database', 'user'), config.get('Database', 'pass'),
@@ -267,6 +272,9 @@ cr = Cronrun()
 session.add(cr)
 cr.log('Main Thread started', 0)
 session.commit()
+
+# get the Symfony Configuration
+s_cfg = session.query(Symfony_Config).filter(Symfony_Config.configInstanceName == 'master').first()
 
 # get all active router objects
 routerList = session.query(Router).filter(Router.active == True).all()
@@ -307,9 +315,12 @@ session.add_all(ipList)
 session.commit()
 
 cr.log(logentry='Main Thread finished with %i results from %i routers in %.2f seconds' % (
-len(res6), len(routerList), (time() - starttime)), type=0)
+    len(res6) + len(res4), len(routerList), (time() - starttime)), type=0)
 
-prune()
+
+# start pruning if it's enabled in the symfony config
+if s_cfg.enablePruning == 1:
+    prune()
 
 cr.finish()
 session.commit()
