@@ -1,4 +1,6 @@
+import StringIO
 import datetime
+import os
 import re
 import threading
 import ConfigParser
@@ -57,9 +59,15 @@ class Router(Base, threading.Thread):
 
             # automatically add new host keys on first connection
             sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
             if self.sshkey:
-                # login using ssh-key
-                sshclient.connect(hostname=self.fqdn, port=self.port, pkey=paramiko.PKey(data=self.sshkey), timeout=20,
+                # login using private key
+                #paramiko.common.logging.basicConfig(level=paramiko.common.DEBUG)
+                keyfile = StringIO.StringIO(self.sshkey)
+                rsakey = paramiko.RSAKey.from_private_key(keyfile)
+
+                sshclient.connect(hostname=self.fqdn, port=int(self.port), username=self.username, pkey=rsakey,
+                                  timeout=20,
                                   look_for_keys=False)
             else:
                 # login using username/password
@@ -229,22 +237,28 @@ class IpAddress(Base):
 
 class Symfony_Config(Base):
     __tablename__ = 'ipv6_config'
-    configInstanceName = Column(String, primary_key=True)
-    securityToken = Column(String)
-    enableExports = Column(Integer)
-    logPruningTime = Column(Integer)
-    maxExportItems = Column(Integer)
-    enablePruning = Column(Integer)
+    configinstancename = Column(String, primary_key=True)
+    securitytoken = Column(String)
+    enableexports = Column(Integer)
+    logpruningtime = Column(Integer)
+    maxexportitems = Column(Integer)
+    enablepruning = Column(Integer)
 
 
 def prune():
-    prunetime = datetime.datetime.today() - datetime.timedelta(days=s_cfg.logPruningTime)
+    prunetime = datetime.datetime.today() - datetime.timedelta(days=s_cfg.logpruningtime)
+
+    # delete timelogs with lastseen < prunetime
     res_timelog = session.query(Timelog).filter(
         Timelog.lastseen < prunetime).delete()
+
+    # delete orphaned ips
     res_ip = session.query(IpAddress).filter(IpAddress.logs == None).delete(synchronize_session='fetch')
-    cr.log(logentry='Pruning: deleted %i Logentrys and %i orphaned ipAddresses' % (res_timelog, res_ip), type=0)
 
+    cr.log(logentry='Pruning: deleted %i Logentrys and %i orphaned IPs' % (res_timelog, res_ip), type=0)
 
+# change working directory
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 starttime = time()
 
 # read the config.cfg
@@ -252,12 +266,13 @@ config = ConfigParser.ConfigParser()
 config.read('config.cfg')
 
 engine = create_engine('%s://%s:%s@%s/%s' % (
-config.get('Database', 'type'), config.get('Database', 'user'), config.get('Database', 'pass'),
-config.get('Database', 'host'), config.get('Database', 'database')), echo=False)
+    config.get('Database', 'type'), config.get('Database', 'user'), config.get('Database', 'pass'),
+    config.get('Database', 'host'), config.get('Database', 'database')), echo=False)
 
 try:
     conn = engine.connect()
 except OperationalError, e:
+    # Database connection failed, write details to error.log
     f = open('error.log', 'a')
     f.write('%s Fatal Error: %s\n' % (strftime("%Y-%m-%d %H:%M:%S"), str(e)))
     f.close()
@@ -274,7 +289,7 @@ cr.log('Main Thread started', 0)
 session.commit()
 
 # get the Symfony Configuration
-s_cfg = session.query(Symfony_Config).filter(Symfony_Config.configInstanceName == 'master').first()
+s_cfg = session.query(Symfony_Config).filter(Symfony_Config.configinstancename == 'master').first()
 
 # get all active router objects
 routerList = session.query(Router).filter(Router.active == True).all()
@@ -319,7 +334,7 @@ cr.log(logentry='Main Thread finished with %i results from %i routers in %.2f se
 
 
 # start pruning if it's enabled in the symfony config
-if s_cfg.enablePruning == 1:
+if s_cfg.enablepruning == 1:
     prune()
 
 cr.finish()
