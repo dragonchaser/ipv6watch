@@ -62,7 +62,7 @@ class Router(Base, threading.Thread):
 
             if self.sshkey:
                 # login using private key
-                #paramiko.common.logging.basicConfig(level=paramiko.common.DEBUG)
+                ##paramiko.common.logging.basicConfig(level=paramiko.common.DEBUG)
                 keyfile = StringIO.StringIO(self.sshkey)
                 rsakey = paramiko.RSAKey.from_private_key(keyfile)
 
