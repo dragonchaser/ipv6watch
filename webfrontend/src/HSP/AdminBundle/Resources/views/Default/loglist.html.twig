@@ -7,6 +7,7 @@
     <div class="userListTable">
         <table class="userListTable">
             <tr>
+                <th>Time</th>
                 <th>Router</th>
                 <th>Logentry</th>
                 <th>Cronrun</th>
@@ -15,7 +16,10 @@
             {% for logentry in logentries %}
                 <tr class="{{ cycle(['odd','even'], loop.index0) }}">
                     <td>
-                        {% if logentry.routerId is not null %}
+                        {{ logentry.time | date('Y-m-d H:i:s') }}
+                    </td>
+                    <td>
+                    {% if logentry.routerId is not null %}
                             {{ logentry.routerId.routerName }}
                         {% endif %}
                     </td>
@@ -27,7 +31,7 @@
                     <td>
                         {% if logentry.cronid is not null %}
                             <span style="cursor: pointer"
-                                  title="Startime: {{ logentry.cronid.starttime|date('Y/m/d - h:m:s') }} - Endtime: {{ logentry.cronid.endtime|date('Y/m/d - h:m:s') }} - Runtime: {{ logentry.cronid.runtime }}s">{{ logentry.cronid.id }}</span>
+                                  title="Startime: {{ logentry.cronid.starttime|date('Y/m/d - H:i:s') }} - Endtime: {{ logentry.cronid.endtime|date('Y/m/d - H:i:s') }} - Runtime: {{ logentry.cronid.runtime }}s">{{ logentry.cronid.id }}</span>
                         {% endif %}
                     </td>
                 </tr>

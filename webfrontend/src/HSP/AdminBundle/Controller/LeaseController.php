@@ -72,7 +72,7 @@ class LeaseController extends Controller
           break;
         default:
       };
-      //$entries = $query->getResult();
+      $entries = $query->getResult();
     }
     return $this->render('HSPAdminBundle:Default:leaselist.html.twig',
       array('leases' => $entries, 'form' => $form->createView()));
